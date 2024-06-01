@@ -31,8 +31,20 @@ const SignIn = () => {
     const email = form.email.value;
     const phone = form.phone.value;
     const password = form.password.value;
+    const birthday = form.birthday.value;
+    const gender = form.gender.value;
+    const site = form.site.value;
     const image = form.image.files[0];
-    const userInfo = { name, address, email, phone, image };
+    const userInfo = {
+      name,
+      address,
+      email,
+      phone,
+      birthday,
+      gender,
+      site,
+      image,
+    };
 
     try {
       await createUser(email, password);
@@ -146,6 +158,49 @@ const SignIn = () => {
                   required
                 />
               </div>
+
+              <div>
+                <label htmlFor="birthday" className="sr-only">
+                  Birthday
+                </label>
+                <input
+                  id="birthday"
+                  name="birthday"
+                  type="date"
+                  placeholder="Birthday"
+                  className="appearance-none mt-2 rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="gender" className="sr-only">
+                  Gender
+                </label>
+                <select
+                  id="gender"
+                  name="gender"
+                  className="appearance-none mt-2 rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  required
+                >
+                  <option value="Female">Gender</option>
+                  <option value="Female">Female</option>
+                  <option value="Male">Male</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="site" className="sr-only">
+                  Site
+                </label>
+                <input
+                  id="site"
+                  name="site"
+                  type="text"
+                  className="appearance-none mt-2 rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  placeholder="Site"
+                />
+              </div>
+
               <div>
                 <label htmlFor="image" className="sr-only">
                   Profile Image

@@ -11,6 +11,7 @@ const Navbar = () => {
   const { user, logOut } = useAuth();
   const [userInfo] = useGetData();
   console.log(userInfo[0]?.name);
+  const isAdmin = false;
 
   const handleLogOut = () => {
     logOut()
@@ -129,12 +130,21 @@ const Navbar = () => {
                       </a>
                     </li>
                     <li className=" rounded">
-                      <NavLink
-                        to={'Dashboard'}
-                        className="flex text-start items-center hover:bg-white hover:text-black px-2 py-1"
-                      >
-                        Dashboard
-                      </NavLink>
+                      {isAdmin ? (
+                        <NavLink
+                          to={'Dashboard/Statistics'}
+                          className="flex text-start items-center hover:bg-white hover:text-black px-2 py-1"
+                        >
+                          Dashboard
+                        </NavLink>
+                      ) : (
+                        <NavLink
+                          to={'Dashboard/MyProfile'}
+                          className="flex text-start items-center hover:bg-white hover:text-black px-2 py-1"
+                        >
+                          Dashboard
+                        </NavLink>
+                      )}
                     </li>
                     <li className=" rounded">
                       <a
