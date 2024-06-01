@@ -1,55 +1,20 @@
 import React, { useState } from 'react';
-
-// Mock data for users
-const users = [
-  {
-    name: 'John Doe',
-    phone: '123-456-7890',
-    parcelsBooked: 10,
-    totalSpent: 1000,
-  },
-  {
-    name: 'Jane Smith',
-    phone: '098-765-4321',
-    parcelsBooked: 15,
-    totalSpent: 1500,
-  },
-  {
-    name: 'Michael Johnson',
-    phone: '555-555-5555',
-    parcelsBooked: 7,
-    totalSpent: 700,
-  },
-  {
-    name: 'Emily Davis',
-    phone: '444-444-4444',
-    parcelsBooked: 12,
-    totalSpent: 1200,
-  },
-  {
-    name: 'David Brown',
-    phone: '333-333-3333',
-    parcelsBooked: 20,
-    totalSpent: 2000,
-  },
-  {
-    name: 'Alice Johnson',
-    phone: '222-222-2222',
-    parcelsBooked: 8,
-    totalSpent: 800,
-  },
-  {
-    name: 'Chris Lee',
-    phone: '111-111-1111',
-    parcelsBooked: 5,
-    totalSpent: 500,
-  },
-  // Add more users as needed
-];
+import useAxiosInstance from '../../../Hooks/useAxiosInstance';
+import useAuth from '../../../Hooks/useAuth';
+import { useQuery } from '@tanstack/react-query';
+import Swal from 'sweetalert2';
 
 const UsersTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 5;
+  const axiosInstance = useAxiosInstance();
+  const { refetch, data: users = [] } = useQuery({
+    queryKey: ['user'],
+    queryFn: async () => {
+      const res = await axiosInstance.get(`/users`);
+      return res.data;
+    },
+  });
 
   // Logic for displaying users
   const indexOfLastUser = currentPage * usersPerPage;
@@ -59,9 +24,39 @@ const UsersTable = () => {
   // Change page
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
-  const handleMakeDeliveryMan = userName => {
-    console.log(`Changing ${userName} to Delivery Man`);
-    // Implement the logic to change user type to Delivery Man
+  const handleMakeDeliveryMan = user => {
+    console.log(user._id);
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, cancel it!',
+    }).then(result => {
+      if (result.isConfirmed) {
+        axiosInstance
+          .patch(`/updateRole/${user._id}`, { role: 'delivaryMan' })
+          .then(response => {
+            console.log(response.data);
+            Swal.fire({
+              title: 'Cancelled!',
+              text: 'Your parcel has been cancelled.',
+              icon: 'success',
+            });
+          })
+          .catch(error => {
+            // Handle error scenarios
+            console.error('Error cancelling parcel:', error);
+            Swal.fire({
+              title: 'Error!',
+              text: 'Failed to cancel the parcel. Please try again later.',
+              icon: 'error',
+            });
+          });
+      }
+    });
   };
 
   const handleMakeAdmin = userName => {
@@ -96,14 +91,14 @@ const UsersTable = () => {
                 <td className="py-2 px-4 border-b">{user.totalSpent} USD</td>
                 <td className="py-2 px-4 border-b">
                   <button
-                    className="bg-green-500 text-white px-4 py-2 rounded mr-2"
-                    onClick={() => handleMakeDeliveryMan(user.name)}
+                    className="bg-green-500 btn-sm text-white px-4  rounded mr-2"
+                    onClick={() => handleMakeDeliveryMan(user)}
                   >
                     Make Delivery Man
                   </button>
                   <button
-                    className="bg-blue-500 text-white px-4 py-2 rounded"
-                    onClick={() => handleMakeAdmin(user.name)}
+                    className="bg-blue-500 btn-sm text-white px-4  rounded"
+                    onClick={() => handleMakeAdmin(user)}
                   >
                     Make Admin
                   </button>
@@ -115,6 +110,7 @@ const UsersTable = () => {
       </div>
       <div className="flex justify-center mt-4">
         <nav>
+          <h1 className="text-gray-300">pagination</h1>
           <ul className="flex pl-0 list-none rounded my-2">
             {Array.from(
               { length: Math.ceil(users.length / usersPerPage) },

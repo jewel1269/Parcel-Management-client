@@ -1,32 +1,50 @@
 import React, { useEffect, useState } from 'react';
-import useGetData from '../../Hooks/useGetData';
-import { DiVim } from 'react-icons/di';
-import useAxiosInstance from '../../Hooks/useAxiosInstance';
 import Swal from 'sweetalert2';
-import { useNavigate } from 'react-router-dom';
+import { useLoaderData, useNavigate } from 'react-router-dom';
+import useGetData from '../../../../Hooks/useGetData';
+import useAxiosInstance from '../../../../Hooks/useAxiosInstance';
 
-const BookParcel = ({ user }) => {
+const UpdateBooking = ({ user }) => {
   const [userInfo] = useGetData();
-  const naviigate = useNavigate();
+  const navigate = useNavigate();
   const axiosInstance = useAxiosInstance();
+  const item = useLoaderData();
+
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phoneNumber: '',
-    status: 'pending',
-    bookingDate: new Date(),
-    parcelType: '',
-    parcelWeight: '',
-    receiverName: '',
-    receiverPhoneNumber: '',
-    deliveryAddress: '',
-    deliveryDate: '',
-    latitude: '',
-    longitude: '',
-    price: '',
+    phoneNumber: item?.phoneNumber || '',
+    parcelType: item?.parcelType || '',
+    parcelWeight: item?.parcelWeight || '',
+    receiverName: item?.receiverName || '',
+    receiverPhoneNumber: item?.receiverPhoneNumber || '',
+    deliveryAddress: item?.deliveryAddress || '',
+    deliveryDate: item?.deliveryDate || '',
+    latitude: item?.latitude || '',
+    longitude: item?.longitude || '',
   });
 
-  console.log(formData);
+  const handleChange = e => {
+    const { name, value } = e.target;
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    try {
+      const response = await axiosInstance.patch(
+        `/updateBooking/${item._id}`,
+        formData
+      );
+      console.log(response.data);
+      Swal.fire('Success', 'Booking updated successfully', 'success');
+      navigate('/Dashboard/MyParcels');
+    } catch (error) {
+      console.error(error); // Log any error for debugging
+      Swal.fire('Error', 'Failed to update booking', 'error');
+    }
+  };
 
   useEffect(() => {
     if (userInfo.length > 0) {
@@ -38,55 +56,9 @@ const BookParcel = ({ user }) => {
     }
   }, [userInfo]);
 
-  const handleChange = e => {
-    const { name, value } = e.target;
-    let updatedFormData = { ...formData, [name]: value };
-
-    if (name === 'parcelWeight') {
-      const weight = parseFloat(value);
-      if (weight <= 1) {
-        updatedFormData.price = 50;
-      } else if (weight <= 2) {
-        updatedFormData.price = 100;
-      } else {
-        updatedFormData.price = 150;
-      }
-    }
-
-    setFormData(updatedFormData);
-  };
-
-  const handleSubmit = e => {
-    e.preventDefault();
-    axiosInstance.post('/bookings', formData).then(res => {
-      console.log(res.data);
-      if (res.data.insertedId) {
-        Swal.fire({
-          title: 'Booking Complete Successfully',
-          showClass: {
-            popup: `
-      animate__animated
-      animate__fadeInUp
-      animate__faster
-    `,
-          },
-          hideClass: {
-            popup: `
-      animate__animated
-      animate__fadeOutDown
-      animate__faster
-      `,
-          },
-        });
-        naviigate('/Dashboard/Myparcels');
-        from.reset();
-      }
-    });
-  };
-
   return (
-    <div className="w-full  mt-10 p-8 bg-white shadow-lg rounded-lg">
-      <h1 className="text-3xl font-bold text-center mb-6">Book a Parcel</h1>
+    <div className="w-full mt-10 p-8 bg-white shadow-lg rounded-lg">
+      <h1 className="text-3xl font-bold text-center mb-6">Update Booking</h1>
       <form
         onSubmit={handleSubmit}
         className="lg:grid md:grid lg:ml-16 lg:mr-16 md:grid-cols-2 lg:grid-cols-2 gap-6"
@@ -96,7 +68,7 @@ const BookParcel = ({ user }) => {
           <input
             type="text"
             name="name"
-            value={formData?.name}
+            value={formData.name}
             readOnly
             className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
           />
@@ -106,7 +78,7 @@ const BookParcel = ({ user }) => {
           <input
             type="email"
             name="email"
-            value={formData?.email}
+            value={formData.email}
             readOnly
             className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
           />
@@ -221,7 +193,7 @@ const BookParcel = ({ user }) => {
           <input
             type="number"
             name="price"
-            value={formData.price}
+            value={item?.price}
             readOnly
             className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
           />
@@ -231,7 +203,7 @@ const BookParcel = ({ user }) => {
             type="submit"
             className="w-full py-2 mt-4 text-white bg-orange-400 rounded-lg hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600"
           >
-            Book
+            Update Booking
           </button>
         </div>
       </form>
@@ -239,4 +211,4 @@ const BookParcel = ({ user }) => {
   );
 };
 
-export default BookParcel;
+export default UpdateBooking;

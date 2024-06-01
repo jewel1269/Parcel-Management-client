@@ -11,7 +11,8 @@ const Navbar = () => {
   const { user, logOut } = useAuth();
   const [userInfo] = useGetData();
   console.log(userInfo[0]?.name);
-  const isAdmin = false;
+  const role = userInfo?.role || userInfo[0]?.role;
+  console.log(userInfo);
 
   const handleLogOut = () => {
     logOut()
@@ -130,14 +131,16 @@ const Navbar = () => {
                       </a>
                     </li>
                     <li className=" rounded">
-                      {isAdmin ? (
+                      {role === 'admin' && (
                         <NavLink
                           to={'Dashboard/Statistics'}
                           className="flex text-start items-center hover:bg-white hover:text-black px-2 py-1"
                         >
                           Dashboard
                         </NavLink>
-                      ) : (
+                      )}
+
+                      {role === 'user' && (
                         <NavLink
                           to={'Dashboard/MyProfile'}
                           className="flex text-start items-center hover:bg-white hover:text-black px-2 py-1"

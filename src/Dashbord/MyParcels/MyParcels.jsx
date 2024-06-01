@@ -1,44 +1,59 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import useAxiosInstance from '../../Hooks/useAxiosInstance';
+import useAuth from '../../Hooks/useAuth';
+import { useQuery } from '@tanstack/react-query';
+import Swal from 'sweetalert2';
 
 const MyParcels = () => {
-  const [parcels, setParcels] = useState([
-    {
-      id: 1,
-      type: 'Document',
-      requestedDeliveryDate: '2023-06-15',
-      approximateDeliveryDate: '2023-06-20',
-      bookingDate: new Date().toLocaleDateString(),
-      deliveryMenId: null,
-      status: 'pending',
-    },
-    {
-      id: 2,
-      type: 'Package',
-      requestedDeliveryDate: '2023-06-10',
-      approximateDeliveryDate: '2023-06-15',
-      bookingDate: new Date().toLocaleDateString(),
-      deliveryMenId: 123,
-      status: 'delivered',
-    },
-  ]);
+  const axiosInstance = useAxiosInstance();
+  const { user } = useAuth();
+  console.log(user?.email);
 
-  const handleUpdate = id => {
-    // Redirect to update page logic
-    console.log(`Update parcel with ID: ${id}`);
-  };
+  const { refetch, data: parcels = [] } = useQuery({
+    queryKey: ['parcel', user?.email],
+    queryFn: async () => {
+      const email = user?.email;
+      const res = await axiosInstance.get(`/Spacificbookings?email=${email}`);
+      return res.data;
+    },
+  });
+  console.log(parcels);
+  console.log(parcels);
 
-  const handleCancel = id => {
-    const confirmCancel = window.confirm(
-      'Are you sure you want to cancel this booking?'
-    );
-    if (confirmCancel) {
-      setParcels(
-        parcels.map(parcel =>
-          parcel.id === id ? { ...parcel, status: 'cancelled' } : parcel
-        )
-      );
-    }
+  const handleCancel = parcel => {
+    console.log(parcel._id);
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, cancel it!',
+    }).then(result => {
+      if (result.isConfirmed) {
+        axiosInstance
+          .patch(`/updateStatus/${parcel._id}`, { status: 'cancelled' })
+          .then(response => {
+            console.log(response.data);
+            Swal.fire({
+              title: 'Cancelled!',
+              text: 'Your parcel has been cancelled.',
+              icon: 'success',
+            });
+          })
+          .catch(error => {
+            // Handle error scenarios
+            console.error('Error cancelling parcel:', error);
+            Swal.fire({
+              title: 'Error!',
+              text: 'Failed to cancel the parcel. Please try again later.',
+              icon: 'error',
+            });
+          });
+      }
+    });
   };
 
   const handleReview = id => {
@@ -69,10 +84,8 @@ const MyParcels = () => {
         <tbody>
           {parcels.map(parcel => (
             <tr key={parcel.id} className="hover:bg-gray-100">
-              <td className="py-2 px-4 border-b">{parcel.type}</td>
-              <td className="py-2 px-4 border-b">
-                {parcel.requestedDeliveryDate}
-              </td>
+              <td className="py-2 px-4 border-b">{parcel.parcelType}</td>
+              <td className="py-2 px-4 border-b">{parcel.deliveryDate}</td>
               <td className="py-2 px-4 border-b">
                 {parcel.approximateDeliveryDate}
               </td>
@@ -82,19 +95,20 @@ const MyParcels = () => {
               </td>
               <td className="py-2 px-4 border-b capitalize">{parcel.status}</td>
               <td className="py-2 px-4 border-b space-x-2">
+                <NavLink to={`/Dashboard/UpdateBooking/${parcel._id}`}>
+                  <button
+                    className={`px-4 btn-xs text-white rounded ${
+                      parcel.status === 'pending'
+                        ? 'bg-blue-500 hover:bg-blue-700'
+                        : 'bg-gray-500 cursor-not-allowed'
+                    }`}
+                    disabled={parcel.status !== 'pending'}
+                  >
+                    Update
+                  </button>
+                </NavLink>
                 <button
-                  onClick={() => handleUpdate(parcel.id)}
-                  className={`px-4 btn-xs text-white rounded ${
-                    parcel.status === 'pending'
-                      ? 'bg-blue-500 hover:bg-blue-700'
-                      : 'bg-gray-500 cursor-not-allowed'
-                  }`}
-                  disabled={parcel.status !== 'pending'}
-                >
-                  Update
-                </button>
-                <button
-                  onClick={() => handleCancel(parcel.id)}
+                  onClick={() => handleCancel(parcel)}
                   className={`px-4 btn-xs text-white rounded ${
                     parcel.status === 'pending'
                       ? 'bg-red-500 hover:bg-red-700'
@@ -120,7 +134,6 @@ const MyParcels = () => {
                     Pay
                   </button>
                 </NavLink>
-
                 {/* <button
                   onClick={() => handlePay(parcel.id)}
                   className="px-4 btn-xs bg-yellow-500 text-white rounded hover:bg-yellow-700"

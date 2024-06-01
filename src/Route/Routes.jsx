@@ -14,6 +14,7 @@ import DeliveryMenTable from '../Dashbord/Admin/DeliveryMenTable/DeliveryMenTabl
 import UsersTable from '../Dashbord/Admin/UsersTable/UsersTable';
 import MyDeliveryList from '../Dashbord/DelibaryMan/MyDeliveryList/MyDeliveryList';
 import MyReviews from '../Dashbord/DelibaryMan/MyReviews/MyReviews';
+import UpdateBooking from '../Dashbord/Admin/UsersTable/Update/UpdateBooking';
 
 export const router = createBrowserRouter([
   {
@@ -83,6 +84,12 @@ export const router = createBrowserRouter([
       {
         path: 'MyReviews',
         element: <MyReviews />,
+      },
+      {
+        path: 'UpdateBooking/:id',
+        element: <UpdateBooking />,
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/bookings/${params.id}`),
       },
     ],
   },

@@ -61,6 +61,7 @@ const Login = () => {
         iamge: result.user.photoURL,
         email: result.user.email,
         name: result.user.displayName,
+        role: 'user',
       };
       axiosInstance.post('/users', userFind).then(res => {
         console.log(res.data);

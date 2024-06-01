@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import useAxiosInstance from '../../../Hooks/useAxiosInstance';
+import useAuth from '../../../Hooks/useAuth';
+import { useQuery } from '@tanstack/react-query';
 // import '../AllParcel/AllParcel.css';
 
 // Mock data
@@ -27,6 +30,17 @@ const AllParcel = () => {
   const [selectedParcel, setSelectedParcel] = useState(null);
   const [deliveryman, setDeliveryman] = useState('');
   const [deliveryDate, setDeliveryDate] = useState('');
+
+  const axiosInstance = useAxiosInstance();
+  const { user } = useAuth();
+
+  const { refetch, data: AllParcels = [] } = useQuery({
+    queryKey: ['AllParcel'],
+    queryFn: async () => {
+      const res = await axiosInstance.get(`/bookings`);
+      return res.data;
+    },
+  });
 
   const openModal = parcel => {
     setSelectedParcel(parcel);
@@ -63,14 +77,22 @@ const AllParcel = () => {
           </tr>
         </thead>
         <tbody>
-          {parcels.map((parcel, index) => (
+          {AllParcels.map((parcel, index) => (
             <tr key={index}>
               <td className="py-2 px-4 border-b">{parcel.name}</td>
-              <td className="py-2 px-4 border-b">{parcel.phone}</td>
+              <td className="py-2 px-4 border-b">{parcel.phoneNumber}</td>
               <td className="py-2 px-4 border-b">{parcel.bookingDate}</td>
               <td className="py-2 px-4 border-b">{parcel.deliveryDate}</td>
-              <td className="py-2 px-4 border-b">{parcel.cost}</td>
-              <td className="py-2 px-4 border-b">{parcel.status}</td>
+              <td className="py-2 px-4 border-b">{parcel.price}</td>
+              <td
+                className={`py-2 btn-xs px-4 border-b ${
+                  parcel.status === 'pending'
+                    ? 'bg-green-500 '
+                    : 'bg-gray-500 cursor-not-allowed'
+                }`}
+              >
+                {parcel.status}
+              </td>
               <td className="py-2 px-4 border-b">
                 <button
                   className="bg-orange-400 btn-xs  text-white px-4  rounded"

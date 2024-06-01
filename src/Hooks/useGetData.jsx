@@ -8,9 +8,9 @@ const useGetData = () => {
 
   const { user } = useContext(AuthContext);
   const { refetch, data: userInfo = [] } = useQuery({
-    queryKey: ['payment', user?.email],
+    queryKey: ['user', user?.email],
     queryFn: async () => {
-      const res = await axiosInstance.get(`/users?email=${user?.email}`);
+      const res = await axiosInstance.get(`/usersInfo?email=${user?.email}`);
       return res.data;
     },
   });

@@ -109,13 +109,13 @@ const MyDeliveryList = () => {
       >
         {selectedLocation && (
           <MapContainer
-            className="w-full h-full"
             center={[selectedLocation.latitude, selectedLocation.longitude]}
             zoom={13}
             scrollWheelZoom={false}
-            style={{ width: '100%', height: '400px' }}
+            style={{ width: '100%', height: '1000px' }}
           >
             <TileLayer
+              className="w-[1200px]"
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />

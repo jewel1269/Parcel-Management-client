@@ -44,6 +44,7 @@ const SignIn = () => {
       gender,
       site,
       image,
+      role: 'user',
     };
 
     try {

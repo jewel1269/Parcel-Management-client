@@ -9,7 +9,7 @@ const MyProfile = () => {
       <div className="border rounded-lg p-4 w-full bg-white shadow">
         <div className="flex flex-col items-center">
           <img
-            src={userInfo[0]?.image} // Placeholder image
+            src={userInfo[0]?.image || userInfo?.image} // Placeholder image
             alt="Profile"
             className="rounded-full w-24 h-24 mb-4"
           />
@@ -17,7 +17,7 @@ const MyProfile = () => {
             <label className="font-bold">NAME:</label>
             <input
               type="text"
-              value={userInfo[0]?.name}
+              value={userInfo[0]?.name || userInfo?.name}
               className="border rounded p-1 mb-2"
             />
             <label className="font-bold">DESIGNATION:</label>
@@ -33,7 +33,9 @@ const MyProfile = () => {
 
       {/* Right Section */}
       <div className="w-full py-3 bg-white shadow p-4 rounded-lg">
-        <h2 className="text-xl font-semibold">{userInfo[0]?.name}</h2>
+        <h2 className="text-xl font-semibold">
+          {userInfo[0]?.name || userInfo?.name}
+        </h2>
         <p className="text-sm text-gray-500">TN, India</p>
         <p className="text-blue-500 underline">{userInfo[0]?.site}</p>
         <div className="flex items-center mt-2">
@@ -56,7 +58,9 @@ const MyProfile = () => {
               </p>
               <p>
                 <span className="font-bold">Email:</span>{' '}
-                <span className="text-red-500">{userInfo[0]?.email}</span>
+                <span className="text-red-500">
+                  {userInfo[0]?.email || userInfo?.email}
+                </span>
               </p>
               <p>
                 <span className="font-bold">Site:</span> {userInfo[0]?.site}
