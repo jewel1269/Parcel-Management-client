@@ -1,13 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import bgImage from '../../../assets/rm373batch2-02.jpg';
 import deliver from '../../../assets/160139-OV2ZS8-552-removebg-preview (1).png';
+import '../Banner/Banner.css';
 
 const Banner = () => {
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsAnimating(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsAnimating(false);
+  };
+
   return (
     <div className="relative">
       {/* Background Image */}
       <div
-        className="absolute inset-0 bg-cover bg-center"
+        className="absolute inset-0 bg-cover bg-center blur-effect"
         style={{
           backgroundImage: `url(${bgImage})`,
           filter: 'blur(5px)',
@@ -26,7 +37,7 @@ const Banner = () => {
         <div className="relative flex flex-col items-center justify-center h-screen">
           <div className="text-center text-white mb-8">
             <h1 className="text-4xl md:text-6xl font-bold">
-              Express Home Delivery
+              Express Home <span className="text-orange-300">Delivery</span>
             </h1>
             <p className="mt-4 max-w-md mx-auto">
               "Experience swift and reliable doorstep delivery. Our service
@@ -52,7 +63,11 @@ const Banner = () => {
             Read More
           </button>
         </div>
-        <div>
+        <div
+          className={`relative ${isAnimating ? 'animate-bike' : ''}`}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
           <img src={deliver} alt="" />
         </div>
       </div>

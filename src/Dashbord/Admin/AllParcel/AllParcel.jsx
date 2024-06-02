@@ -3,7 +3,6 @@ import useAxiosInstance from '../../../Hooks/useAxiosInstance';
 import useAuth from '../../../Hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
 import useGetData from '../../../Hooks/useGetData';
-// import '../AllParcel/AllParcel.css';
 
 const AllParcel = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -43,11 +42,32 @@ const AllParcel = () => {
     setDeliveryDate('');
   };
 
-  const handleAssign = () => {
-    // Implement the logic to change the status to 'On The Way' and add the deliveryman ID here
-    console.log('Assigning deliveryman:', deliveryman);
-    console.log('Approximate delivery date:', deliveryDate);
-    closeModal();
+  const handleAssign = async () => {
+    try {
+      if (!deliveryman || !deliveryDate) {
+        console.log('Please select deliveryman and delivery date.');
+        return;
+      }
+      const updatedParcel = {
+        ...selectedParcel,
+        status: 'On The Way',
+        assignedDeliveryman: deliveryman,
+        deliveryDate: deliveryDate,
+      };
+
+      console.log('Updated Parcel:', updatedParcel); // Add this console log
+
+      // const res = await axiosInstance.patch(
+      //   `/bookings/${selectedParcel._id}`,
+      //   updatedParcel
+      // );
+      // console.log(updatedParcel);
+
+      // Close the modal
+      closeModal();
+    } catch (error) {
+      console.error('Error assigning deliveryman:', error);
+    }
   };
 
   return (
@@ -120,13 +140,11 @@ const AllParcel = () => {
                     <option value="">Select Deliveryman</option>
                     {deliveryMen &&
                       deliveryMen.map(boy => (
-                        <option key={boy._id} value="1">
+                        <option key={boy._id} value={boy._id}>
                           {' '}
                           {boy?.name}
                         </option>
                       ))}
-
-                    {/* Add more deliverymen options as needed */}
                   </select>
                 </div>
                 <div className="mb-4">

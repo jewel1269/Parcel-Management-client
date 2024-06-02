@@ -1,0 +1,15 @@
+@keyframes bikeRunning {
+  0% {
+    transform: translateX(0) rotate(0deg);
+  }
+  50% {
+    transform: translateX(150px) rotate(15deg);
+  }
+  100% {
+    transform: translateX(0) rotate(0deg);
+  }
+}
+
+.animate-bike {
+  animation: bikeRunning 1.5s infinite;
+}
