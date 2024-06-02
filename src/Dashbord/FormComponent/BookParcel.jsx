@@ -4,14 +4,17 @@ import { DiVim } from 'react-icons/di';
 import useAxiosInstance from '../../Hooks/useAxiosInstance';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import useAuth from '../../Hooks/useAuth';
 
-const BookParcel = ({ user }) => {
+const BookParcel = () => {
   const [userInfo] = useGetData();
-  const naviigate = useNavigate();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  console.log(user);
   const axiosInstance = useAxiosInstance();
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
+    name: userInfo?.name || user?.displayName || userInfo[0]?.name,
+    email: user?.email,
     phoneNumber: '',
     status: 'pending',
     bookingDate: new Date(),
@@ -25,18 +28,7 @@ const BookParcel = ({ user }) => {
     longitude: '',
     price: '',
   });
-
-  console.log(formData);
-
-  useEffect(() => {
-    if (userInfo.length > 0) {
-      setFormData(prevState => ({
-        ...prevState,
-        name: userInfo[0]?.name || '',
-        email: userInfo[0]?.email || '',
-      }));
-    }
-  }, [userInfo]);
+  console.log(userInfo);
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -78,7 +70,7 @@ const BookParcel = ({ user }) => {
       `,
           },
         });
-        naviigate('/Dashboard/Myparcels');
+        navigate('/Dashboard/Myparcels');
         from.reset();
       }
     });

@@ -2,37 +2,26 @@ import React, { useState } from 'react';
 import useAxiosInstance from '../../../Hooks/useAxiosInstance';
 import useAuth from '../../../Hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
+import useGetData from '../../../Hooks/useGetData';
 // import '../AllParcel/AllParcel.css';
-
-// Mock data
-const parcels = [
-  {
-    name: 'HUA HAI ',
-    phone: '327732128333',
-    bookingDate: '10 Dec 2017',
-    deliveryDate: '15 Dec 2017',
-    cost: '88338.93 USD',
-    status: 'Perfect',
-  },
-  {
-    name: 'David ',
-    phone: '312036709700',
-    bookingDate: '10 Oct 2017',
-    deliveryDate: '15 Oct 2017',
-    cost: '39090.47 EUR',
-    status: 'Sufficient',
-  },
-  // Add more mock data as needed
-];
 
 const AllParcel = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedParcel, setSelectedParcel] = useState(null);
   const [deliveryman, setDeliveryman] = useState('');
   const [deliveryDate, setDeliveryDate] = useState('');
+  const [userInfo] = useGetData();
 
   const axiosInstance = useAxiosInstance();
   const { user } = useAuth();
+
+  const { data: deliveryMen } = useQuery({
+    queryKey: ['deliveryMen'],
+    queryFn: async () => {
+      const res = await axiosInstance.get('/Delivar?role=delivaryMan');
+      return res.data;
+    },
+  });
 
   const { refetch, data: AllParcels = [] } = useQuery({
     queryKey: ['AllParcel'],
@@ -94,12 +83,21 @@ const AllParcel = () => {
                 {parcel.status}
               </td>
               <td className="py-2 px-4 border-b">
-                <button
-                  className="bg-orange-400 btn-xs  text-white px-4  rounded"
-                  onClick={() => openModal(parcel)}
-                >
-                  Manage
-                </button>
+                {parcel?.status === 'pending' ? (
+                  <button
+                    className="bg-orange-400 btn-xs text-white px-4 rounded"
+                    onClick={() => openModal(parcel)}
+                  >
+                    Manage
+                  </button>
+                ) : (
+                  <button
+                    className="bg-gray-400 btn-xs text-white px-4 rounded cursor-not-allowed"
+                    disabled
+                  >
+                    Not Available
+                  </button>
+                )}
               </td>
             </tr>
           ))}
@@ -120,8 +118,14 @@ const AllParcel = () => {
                     className="w-full p-2 border border-gray-300 rounded"
                   >
                     <option value="">Select Deliveryman</option>
-                    <option value="1">Deliveryman 1</option>
-                    <option value="2">Deliveryman 2</option>
+                    {deliveryMen &&
+                      deliveryMen.map(boy => (
+                        <option key={boy._id} value="1">
+                          {' '}
+                          {boy?.name}
+                        </option>
+                      ))}
+
                     {/* Add more deliverymen options as needed */}
                   </select>
                 </div>

@@ -23,7 +23,7 @@ const MyProfile = () => {
             <label className="font-bold">DESIGNATION:</label>
             <input
               type="text"
-              value={userInfo[0]?.site}
+              value={userInfo?.site}
               className="border rounded p-1 mb-4"
             />
             <button className="bg-blue-500 text-white rounded p-2">SAVE</button>
@@ -50,11 +50,10 @@ const MyProfile = () => {
             <div>
               <h3 className="font-semibold">CONTACT INFORMATION</h3>
               <p>
-                <span className="font-bold">Address:</span>{' '}
-                {userInfo[0]?.address}
+                <span className="font-bold">Address:</span> {userInfo?.address}
               </p>
               <p>
-                <span className="font-bold">Phone:</span> {userInfo[0]?.phone}
+                <span className="font-bold">Phone:</span> {userInfo?.phone}
               </p>
               <p>
                 <span className="font-bold">Email:</span>{' '}
@@ -63,17 +62,17 @@ const MyProfile = () => {
                 </span>
               </p>
               <p>
-                <span className="font-bold">Site:</span> {userInfo[0]?.site}
+                <span className="font-bold">Site:</span> {userInfo?.site}
               </p>
             </div>
             <div className="mt-4">
               <h3 className="font-semibold">BASIC INFORMATION</h3>
               <p>
                 <span className="font-bold">Birthday:</span>{' '}
-                {userInfo[0]?.birthday}
+                {userInfo?.birthday}
               </p>
               <p>
-                <span className="font-bold">Gender:</span> {userInfo[0]?.gender}
+                <span className="font-bold">Gender:</span> {userInfo?.gender}
               </p>
             </div>
           </div>

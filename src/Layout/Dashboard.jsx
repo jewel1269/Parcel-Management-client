@@ -11,7 +11,7 @@ const Dashboard = () => {
     <div className="lg:flex">
       <aside className="flex  flex-col w-72 h-min-screen px-4  overflow-y-auto bg-gray-50 rounded-xl shadow-xl border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700">
         <h1 className="text-center mt-5 font-bold">
-          WelCome {userInfo[0]?.name}!
+          Welcome {userInfo?.name}!
         </h1>
         <div className="relative mt-6">
           <span className="absolute inset-y-0 left-0 flex items-center pl-3">

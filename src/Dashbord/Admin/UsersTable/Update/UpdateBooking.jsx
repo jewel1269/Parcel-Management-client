@@ -3,14 +3,18 @@ import Swal from 'sweetalert2';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 import useGetData from '../../../../Hooks/useGetData';
 import useAxiosInstance from '../../../../Hooks/useAxiosInstance';
+import useAuth from '../../../../Hooks/useAuth';
 
-const UpdateBooking = ({ user }) => {
+const UpdateBooking = () => {
   const [userInfo] = useGetData();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const axiosInstance = useAxiosInstance();
   const item = useLoaderData();
 
   const [formData, setFormData] = useState({
+    name: user?.name || user?.displayName,
+    email: user?.email,
     phoneNumber: item?.phoneNumber || '',
     parcelType: item?.parcelType || '',
     parcelWeight: item?.parcelWeight || '',
@@ -30,6 +34,8 @@ const UpdateBooking = ({ user }) => {
     }));
   };
 
+  console.log(formData);
+
   const handleSubmit = async e => {
     e.preventDefault();
     try {
@@ -45,16 +51,6 @@ const UpdateBooking = ({ user }) => {
       Swal.fire('Error', 'Failed to update booking', 'error');
     }
   };
-
-  useEffect(() => {
-    if (userInfo.length > 0) {
-      setFormData(prevState => ({
-        ...prevState,
-        name: userInfo[0]?.name || '',
-        email: userInfo[0]?.email || '',
-      }));
-    }
-  }, [userInfo]);
 
   return (
     <div className="w-full mt-10 p-8 bg-white shadow-lg rounded-lg">
