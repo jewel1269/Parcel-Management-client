@@ -55,15 +55,9 @@ const AllParcel = () => {
         deliveryDate: deliveryDate,
       };
 
-      console.log('Updated Parcel:', updatedParcel); // Add this console log
+      console.log('Updated Parcel:', updatedParcel);
+      const res = axiosInstance.post('/bookingAssign', updatedParcel);
 
-      // const res = await axiosInstance.patch(
-      //   `/bookings/${selectedParcel._id}`,
-      //   updatedParcel
-      // );
-      // console.log(updatedParcel);
-
-      // Close the modal
       closeModal();
     } catch (error) {
       console.error('Error assigning deliveryman:', error);
