@@ -1,27 +1,28 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Modal from 'react-modal';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import useAxiosInstance from '../../../Hooks/useAxiosInstance';
+import { useQuery } from '@tanstack/react-query';
+import useGetData from '../../../Hooks/useGetData';
 
 // Sample data
-const parcels = [
-  {
-    bookedUserName: 'John Doe',
-    receiverName: 'Jane Smith',
-    bookedUserPhone: '123-456-7890',
-    requestedDeliveryDate: '2023-06-01',
-    approximateDeliveryDate: '2023-06-05',
-    receiverPhoneNumber: '098-765-4321',
-    receiverAddress: '123 Elm Street',
-    latitude: 37.7749,
-    longitude: -122.4194,
-  },
-  // Add more parcels as needed
-];
 
 const MyDeliveryList = () => {
-  const [parcelData, setParcelData] = useState(parcels);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState(null);
+  const [userInfo] = useGetData();
+
+  const axiosInstance = useAxiosInstance();
+  const { refetch, data: parcels = [] } = useQuery({
+    queryKey: ['parcels', userInfo?.email],
+    queryFn: async () => {
+      const res = await axiosInstance.get(
+        `/assignBook?email=${userInfo?.email}`
+      );
+      return res.data;
+    },
+  });
+  const [parcelData, setParcelData] = useState(parcels);
 
   const handleCancel = index => {
     if (window.confirm('Are you sure you want to cancel this delivery?')) {
@@ -30,12 +31,15 @@ const MyDeliveryList = () => {
       setParcelData(updatedParcels);
     }
   };
+  console.log(parcelData);
 
-  const handleDeliver = index => {
-    if (window.confirm('Are you sure you want to mark this as delivered?')) {
-      const updatedParcels = [...parcelData];
-      updatedParcels[index].status = 'Delivered';
-      setParcelData(updatedParcels);
+  const handleDeliver = async parcel => {
+    console.log(parcel?._id);
+    const res = await axiosInstance.patch(`/updateStatus/${parcel?._id}`, {
+      status: 'Delivered',
+    });
+    if (res.data.modifiedCount > 0) {
+      alert('success');
     }
   };
 
@@ -50,7 +54,7 @@ const MyDeliveryList = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container overflow-x-auto mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Assigned Parcels</h1>
       <table className="min-w-full bg-white">
         <thead>
@@ -66,15 +70,15 @@ const MyDeliveryList = () => {
           </tr>
         </thead>
         <tbody>
-          {parcelData.map((parcel, index) => (
+          {parcels.map((parcel, index) => (
             <tr key={index} className="text-center border-t">
-              <td className="py-2">{parcel.bookedUserName}</td>
+              <td className="py-2">{parcel.name}</td>
               <td className="py-2">{parcel.receiverName}</td>
-              <td className="py-2">{parcel.bookedUserPhone}</td>
-              <td className="py-2">{parcel.requestedDeliveryDate}</td>
-              <td className="py-2">{parcel.approximateDeliveryDate}</td>
+              <td className="py-2">{parcel.phoneNumber}</td>
+              <td className="py-2">{parcel.deliveryDate}</td>
+              <td className="py-2">{parcel.ApproximateDate}</td>
               <td className="py-2">{parcel.receiverPhoneNumber}</td>
-              <td className="py-2">{parcel.receiverAddress}</td>
+              <td className="py-2">{parcel.deliveryAddress}</td>
               <td className="py-2 flex justify-center space-x-2">
                 <button
                   className="bg-blue-500 btn-xs text-white px-3 py-1 rounded"
@@ -90,7 +94,7 @@ const MyDeliveryList = () => {
                 </button>
                 <button
                   className="bg-green-500 btn-xs text-white px-3 py-1 rounded"
-                  onClick={() => handleDeliver(index)}
+                  onClick={() => handleDeliver(parcel)}
                 >
                   Deliver
                 </button>

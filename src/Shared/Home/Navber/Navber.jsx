@@ -74,7 +74,7 @@ const Navbar = () => {
 
         {/* Mobile Menu open: "block", Menu closed: "hidden" */}
         <div
-          className={`absolute inset-x-0 z-20 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-white dark:bg-gray-800 md:mt-0 md:p-0 md:top-0 md:relative md:bg-transparent md:w-auto md:flex md:items-center ${
+          className={`absolute inset-x-0 z-20 w-full px-6 py-4 transition-all duration-300 ease-in-out  dark:bg-gray-800 md:mt-0 md:p-0 md:top-0 md:relative md:bg-transparent md:w-auto md:flex md:items-center ${
             isOpen
               ? 'translate-x-0 opacity-100'
               : 'opacity-0 -translate-x-full md:opacity-100 md:translate-x-0'
@@ -82,13 +82,13 @@ const Navbar = () => {
         >
           <div className="flex flex-col md:flex-row md:mx-6">
             <a
-              className="my-2 text-white transition-colors duration-300 transform dark:text-gray-200 hover:text-orange-400 dark:hover:text-blue-400 md:mx-4 md:my-0"
+              className="my-2 text-green-500 transition-colors duration-300 transform dark:text-gray-200 hover:text-orange-400 dark:hover:text-blue-400 md:mx-4 md:my-0"
               href="#"
             >
               Home
             </a>
             <a
-              className="my-2 text-white transition-colors duration-300 transform hover:text-orange-400  dark:hover:text-blue-400 md:mx-4 md:my-0"
+              className="my-2 text-green-500 transition-colors duration-300 transform hover:text-orange-400  dark:hover:text-blue-400 md:mx-4 md:my-0"
               href="#"
             >
               Dashboard
@@ -97,7 +97,7 @@ const Navbar = () => {
 
           <div className="flex items-center gap-4">
             <a
-              className="relative text-white transition-colors duration-300 transform dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-300"
+              className="relative text-green-500 transition-colors duration-300 transform dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-300"
               href="#"
             >
               <MdNotificationAdd className="h-6 hover:text-orange-400 w-6" />
