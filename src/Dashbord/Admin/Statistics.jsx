@@ -1,14 +1,26 @@
 import React from 'react';
 import Chart from 'react-apexcharts';
+import useAxiosInstance from '../../Hooks/useAxiosInstance';
+import { useQuery } from '@tanstack/react-query';
 
 const Statistics = () => {
+  const axiosInstance = useAxiosInstance();
+  const { refetch, data: series = [] } = useQuery({
+    queryKey: ['series'],
+    queryFn: async () => {
+      const res = await axiosInstance.get(`/bookings`);
+      return res.data;
+    },
+  });
+
   const lineChartData = {
     series: [
       {
-        name: 'Bookings',
-        data: [10, 41, 35, 51, 49, 62, 69, 91, 148],
+        name: [...series.map(item => item?.name)],
+        data: [...series.map(item => item?.bookingDate)],
       },
     ],
+
     options: {
       chart: {
         height: 350,
@@ -95,11 +107,11 @@ const Statistics = () => {
           <p className="text-3xl font-bold text-blue-600">$2723</p>
         </div>
         <div className="bg-white shadow rounded-lg p-4">
-          <h2 className="text-xl font-semibold">Downloads</h2>
-          <p className="text-3xl font-bold text-yellow-600">2,142,950</p>
+          <h2 className="text-xl font-semibold">Bookings</h2>
+          <p className="text-3xl font-bold text-yellow-600">{series.length}</p>
         </div>
         <div className="bg-white shadow rounded-lg p-4">
-          <h2 className="text-xl font-semibold">Favorites</h2>
+          <h2 className="text-xl font-semibold">Delivared</h2>
           <p className="text-3xl font-bold text-green-600">232,000</p>
         </div>
         <div className="bg-white shadow rounded-lg p-4">

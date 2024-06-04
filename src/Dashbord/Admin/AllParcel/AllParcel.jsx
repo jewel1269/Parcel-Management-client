@@ -3,6 +3,7 @@ import useAxiosInstance from '../../../Hooks/useAxiosInstance';
 import useAuth from '../../../Hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
 import useGetData from '../../../Hooks/useGetData';
+import Swal from 'sweetalert2';
 
 const AllParcel = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -43,25 +44,28 @@ const AllParcel = () => {
   };
 
   const handleAssign = async () => {
-    try {
-      if (!deliveryman || !deliveryDate) {
-        console.log('Please select deliveryman and delivery date.');
-        return;
-      }
-      const updatedParcel = {
-        ...selectedParcel,
-        status: 'On The Way',
-        assignedDeliveryman: deliveryman,
-        deliveryDate: deliveryDate,
-      };
+    const updatedParcel = {
+      ...selectedParcel,
+      assignedDeliveryman: deliveryMen,
+      ApproximateDate: deliveryDate,
+    };
+    console.log('Updated Parcel:', updatedParcel);
+    const res = await axiosInstance.post('/assignBook', updatedParcel, {
+      status: 'On The Way',
+    });
 
-      console.log('Updated Parcel:', updatedParcel);
-      const res = axiosInstance.post('/bookingAssign', updatedParcel);
-
-      closeModal();
-    } catch (error) {
-      console.error('Error assigning deliveryman:', error);
+    if (res.data.insertedId) {
+      Swal.fire({
+        title: 'Successful',
+        showClass: {
+          popup: 'animate__animated animate__fadeInUp animate__faster',
+        },
+        hideClass: {
+          popup: 'animate__animated animate__fadeOutDown animate__faster',
+        },
+      });
     }
+    closeModal();
   };
 
   return (
