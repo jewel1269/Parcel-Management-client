@@ -4,11 +4,11 @@ import useAxiosInstance from '../../Hooks/useAxiosInstance';
 import useAuth from '../../Hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
+import ReviewModal from './ReviewModal'; // Import the ReviewModal component
 
 const MyParcels = () => {
   const axiosInstance = useAxiosInstance();
   const { user } = useAuth();
-  console.log(user?.email);
 
   const { refetch, data: parcels = [] } = useQuery({
     queryKey: ['parcel', user?.email],
@@ -18,11 +18,11 @@ const MyParcels = () => {
       return res.data;
     },
   });
-  console.log(parcels);
-  console.log(parcels);
+
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [selectedDeliveryMenId, setSelectedDeliveryMenId] = useState(null);
 
   const handleCancel = parcel => {
-    console.log(parcel._id);
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -36,15 +36,14 @@ const MyParcels = () => {
         axiosInstance
           .patch(`/updateStatus/${parcel._id}`, { status: 'cancelled' })
           .then(response => {
-            console.log(response.data);
             Swal.fire({
               title: 'Cancelled!',
               text: 'Your parcel has been cancelled.',
               icon: 'success',
             });
+            refetch(); // Refetch parcels after cancellation
           })
           .catch(error => {
-            // Handle error scenarios
             console.error('Error cancelling parcel:', error);
             Swal.fire({
               title: 'Error!',
@@ -56,18 +55,41 @@ const MyParcels = () => {
     });
   };
 
-  const handleReview = id => {
-    // Logic to handle review
-    console.log(`Review parcel with ID: ${id}`);
+  const handleReview = deliveryMenId => {
+    setSelectedDeliveryMenId(deliveryMenId);
+    setShowReviewModal(true);
+  };
+
+  const handleSubmitReview = async review => {
+    try {
+      await axiosInstance.post('/reviews', {
+        ...review,
+        userName: user.name,
+        userImage: user.image,
+        userId: user._id,
+      });
+      Swal.fire({
+        title: 'Success!',
+        text: 'Your review has been submitted.',
+        icon: 'success',
+      });
+      // You can add additional logic here, such as updating the UI or refetching data
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      Swal.fire({
+        title: 'Error!',
+        text: 'Failed to submit the review. Please try again later.',
+        icon: 'error',
+      });
+    }
   };
 
   const handlePay = id => {
-    // Logic to handle payment
     console.log(`Pay for parcel with ID: ${id}`);
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container overflow-x-auto mx-auto p-4">
       <h2 className="text-2xl font-bold mb-4">My Parcels</h2>
       <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow">
         <thead>
@@ -83,7 +105,7 @@ const MyParcels = () => {
         </thead>
         <tbody>
           {parcels.map(parcel => (
-            <tr key={parcel.id} className="hover:bg-gray-100">
+            <tr key={parcel._id} className="hover:bg-gray-100">
               <td className="py-2 px-4 border-b">{parcel.parcelType}</td>
               <td className="py-2 px-4 border-b">{parcel.deliveryDate}</td>
               <td className="py-2 px-4 border-b">
@@ -107,39 +129,34 @@ const MyParcels = () => {
                     Update
                   </button>
                 </NavLink>
-                <button
-                  onClick={() => handleCancel(parcel)}
-                  className={`px-4 btn-xs text-white rounded ${
-                    parcel.status === 'pending'
-                      ? 'bg-red-500 hover:bg-red-700'
-                      : 'bg-gray-500 cursor-not-allowed'
-                  }`}
-                  disabled={parcel.status !== 'pending'}
-                >
-                  Cancel
-                </button>
-                {parcel.status === 'delivered' && (
+                {parcel.status === 'Delivered' ? (
                   <button
-                    onClick={() => handleReview(parcel.id)}
+                    onClick={() => handleReview(parcel.deliveryMenId)}
                     className="px-4 btn-xs bg-green-500 text-white rounded hover:bg-green-700"
                   >
                     Review
                   </button>
+                ) : (
+                  <button
+                    onClick={() => handleCancel(parcel)}
+                    className={`px-4 btn-xs text-white rounded ${
+                      parcel.status === 'pending'
+                        ? 'bg-red-500 hover:bg-red-700'
+                        : 'bg-gray-500 cursor-not-allowed'
+                    }`}
+                    disabled={parcel.status !== 'pending'}
+                  >
+                    Cancel
+                  </button>
                 )}
                 <NavLink to={'/Dashboard/Payment'}>
                   <button
-                    onClick={() => handlePay(parcel.id)}
+                    onClick={() => handlePay(parcel._id)}
                     className="px-4 btn-xs bg-yellow-500 text-white rounded hover:bg-yellow-700"
                   >
                     Pay
                   </button>
                 </NavLink>
-                {/* <button
-                  onClick={() => handlePay(parcel.id)}
-                  className="px-4 btn-xs bg-yellow-500 text-white rounded hover:bg-yellow-700"
-                >
-                  Pay
-                </button> */}
               </td>
             </tr>
           ))}

@@ -11,6 +11,14 @@ const FeaturesSection = () => {
     usersRegistered: 3420,
   });
 
+  const { refetch, data: AllParcels = [] } = useQuery({
+    queryKey: ['AllParcel'],
+    queryFn: async () => {
+      const res = await axiosInstance.get(`/bookings`);
+      return res.data;
+    },
+  });
+
   const axiosInstance = useAxiosInstance();
   const { data: features = [] } = useQuery({
     queryKey: ['feature'],
@@ -58,7 +66,7 @@ const FeaturesSection = () => {
         <div className="rounded h-24 shadow-md  text-center">
           <h3 className="text-xl font-medium mb-2">Total Parcels Booked</h3>
           <CountUp
-            end={stats.parcelsBooked}
+            end={AllParcels.length}
             duration={3.5}
             separator=","
             decimals={0}

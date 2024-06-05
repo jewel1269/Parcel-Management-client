@@ -34,15 +34,25 @@ const MyDeliveryList = () => {
   console.log(parcelData);
 
   const handleDeliver = async parcel => {
-    console.log(parcel?._id);
-    const res = await axiosInstance.patch(`/updateStatus/${parcel?._id}`, {
+    console.log(parcel);
+
+    const res = await axiosInstance.patch(`/updateDeliver/${parcel?.email}`, {
       status: 'Delivered',
     });
+
+    const response = await axiosInstance.patch(
+      `/updateDeliver/${parcel?.email}`,
+      {
+        status: 'Delivered',
+      }
+    );
+
     if (res.data.modifiedCount > 0) {
-      alert('success');
+      alert('Success');
+    } else {
+      alert('No updates made');
     }
   };
-
   const openModal = (latitude, longitude) => {
     setSelectedLocation({ latitude, longitude });
     setModalIsOpen(true);

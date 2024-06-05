@@ -95,7 +95,7 @@ const Navbar = () => {
             </a>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="lg:flex lg:items-center gap-4">
             <a
               className="relative text-green-500 transition-colors duration-300 transform dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-300"
               href="#"
@@ -123,7 +123,7 @@ const Navbar = () => {
                   </div>
                   <ul
                     tabIndex={0}
-                    className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow-lg text-white rounded-lg w-52 border border-gray-200"
+                    className="menu menu-sm dropdown-content  mt-3 z-[1] p-2 shadow-lg text-white rounded-lg w-52 border border-gray-200"
                   >
                     <li className=" rounded">
                       <a className="flex justify-between hover:bg-white hover:text-black items-center px-2 py-1">

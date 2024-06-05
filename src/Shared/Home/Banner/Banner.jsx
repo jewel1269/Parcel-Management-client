@@ -18,7 +18,7 @@ const Banner = () => {
     <div className="relative">
       {/* Background Image */}
       <div
-        className="absolute inset-0 bg-cover bg-center blur-effect"
+        className="absolute  inset-0 bg-cover bg-center blur-effect"
         style={{
           backgroundImage: `url(${bgImage})`,
           filter: 'blur(5px)',
@@ -33,9 +33,9 @@ const Banner = () => {
       ></div>
 
       {/* Content */}
-      <div className="flex justify-center lg:gap-20 items-center">
+      <div className="lg:flex md:flex justify-center lg:gap-20 items-center">
         <div className="relative flex flex-col items-center justify-center h-screen">
-          <div className="text-center text-white mb-8">
+          <div className="text-center lg:mt-0 md:mt-0 mt-32 text-white mb-8">
             <h1 className="text-4xl md:text-6xl font-bold">
               Express Home <span className="text-orange-300">Delivery</span>
             </h1>

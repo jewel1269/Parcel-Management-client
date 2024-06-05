@@ -10,6 +10,9 @@ const AllParcel = () => {
   const [selectedParcel, setSelectedParcel] = useState(null);
   const [deliveryman, setDeliveryman] = useState('');
   const [deliveryDate, setDeliveryDate] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [filteredParcels, setFilteredParcels] = useState([]);
   const [userInfo] = useGetData();
 
   const axiosInstance = useAxiosInstance();
@@ -43,16 +46,19 @@ const AllParcel = () => {
     setDeliveryDate('');
   };
 
+  const handleAssignStatus = async id => {
+    await axiosInstance.patch(`/updateDeliverBooking/${id}`, {
+      status: 'On The Way',
+    });
+  };
+
   const handleAssign = async () => {
     const updatedParcel = {
       ...selectedParcel,
-      assignedDeliveryman: deliveryMen,
-      ApproximateDate: deliveryDate,
+      assignedDeliveryman: deliveryman,
+      approximateDate: deliveryDate,
     };
-    console.log('Updated Parcel:', updatedParcel);
-    const res = await axiosInstance.post('/assignBook', updatedParcel, {
-      status: 'On The Way',
-    });
+    const res = await axiosInstance.post('/assignBook', updatedParcel);
 
     if (res.data.insertedId) {
       Swal.fire({
@@ -64,13 +70,50 @@ const AllParcel = () => {
           popup: 'animate__animated animate__fadeOutDown animate__faster',
         },
       });
+      handleAssignStatus(selectedParcel._id);
     }
     closeModal();
   };
 
+  const handleSearch = () => {
+    const filtered = AllParcels.filter(parcel => {
+      const deliveryDate = new Date(parcel.deliveryDate);
+      return (
+        deliveryDate >= new Date(startDate) && deliveryDate <= new Date(endDate)
+      );
+    });
+    setFilteredParcels(filtered);
+  };
+
   return (
-    <div className="container mx-auto p-4">
+    <div className="container overflow-x-auto mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">All Parcels</h1>
+
+      {/* Date Range Filter */}
+      <div className="mb-4">
+        <label className="block mb-2">Select Date Range</label>
+        <div className="flex space-x-2">
+          <input
+            type="date"
+            value={startDate}
+            onChange={e => setStartDate(e.target.value)}
+            className="p-1 border border-gray-300 rounded"
+          />
+          <input
+            type="date"
+            value={endDate}
+            onChange={e => setEndDate(e.target.value)}
+            className="p-1 border border-gray-300 rounded"
+          />
+          <button
+            onClick={handleSearch}
+            className="bg-orange-500 btn-sm text-white px-4 py-1 rounded"
+          >
+            Search
+          </button>
+        </div>
+      </div>
+
       <table className="min-w-full bg-white border border-gray-200">
         <thead>
           <tr>
@@ -84,41 +127,45 @@ const AllParcel = () => {
           </tr>
         </thead>
         <tbody>
-          {AllParcels.map((parcel, index) => (
-            <tr key={index}>
-              <td className="py-2 px-4 border-b">{parcel.name}</td>
-              <td className="py-2 px-4 border-b">{parcel.phoneNumber}</td>
-              <td className="py-2 px-4 border-b">{parcel.bookingDate}</td>
-              <td className="py-2 px-4 border-b">{parcel.deliveryDate}</td>
-              <td className="py-2 px-4 border-b">{parcel.price}</td>
-              <td
-                className={`py-2 btn-xs px-4 border-b ${
-                  parcel.status === 'pending'
-                    ? 'bg-green-500 '
-                    : 'bg-gray-500 cursor-not-allowed'
-                }`}
-              >
-                {parcel.status}
-              </td>
-              <td className="py-2 px-4 border-b">
-                {parcel?.status === 'pending' ? (
-                  <button
-                    className="bg-orange-400 btn-xs text-white px-4 rounded"
-                    onClick={() => openModal(parcel)}
-                  >
-                    Manage
-                  </button>
-                ) : (
-                  <button
-                    className="bg-gray-400 btn-xs text-white px-4 rounded cursor-not-allowed"
-                    disabled
-                  >
-                    Not Available
-                  </button>
-                )}
-              </td>
-            </tr>
-          ))}
+          {(filteredParcels.length > 0 ? filteredParcels : AllParcels).map(
+            (parcel, index) => (
+              <tr key={index}>
+                <td className="py-2 px-4 border-b">{parcel.name}</td>
+                <td className="py-2 px-4 border-b">{parcel.phoneNumber}</td>
+                <td className="py-2 px-4 border-b">{parcel.bookingDate}</td>
+                <td className="py-2 px-4 border-b">{parcel.deliveryDate}</td>
+                <td className="py-2 px-4 border-b">{parcel.price}</td>
+                <td
+                  className={`py-2 btn-xs px-4 border-b ${
+                    parcel.status === 'pending'
+                      ? 'bg-green-500'
+                      : parcel.status === 'Delivered'
+                      ? 'bg-blue-500'
+                      : 'bg-gray-500 cursor-not-allowed'
+                  }`}
+                >
+                  {parcel.status}
+                </td>
+                <td className="py-2 px-4 border-b">
+                  {parcel?.status === 'pending' ? (
+                    <button
+                      className="bg-orange-400 btn-xs text-white px-4 rounded"
+                      onClick={() => openModal(parcel)}
+                    >
+                      Manage
+                    </button>
+                  ) : (
+                    <button
+                      className="bg-gray-400 btn-xs text-white px-4 rounded cursor-not-allowed"
+                      disabled
+                    >
+                      Not Available
+                    </button>
+                  )}
+                </td>
+              </tr>
+            )
+          )}
         </tbody>
       </table>
 
@@ -139,7 +186,6 @@ const AllParcel = () => {
                     {deliveryMen &&
                       deliveryMen.map(boy => (
                         <option key={boy._id} value={boy._id}>
-                          {' '}
                           {boy?.name}
                         </option>
                       ))}

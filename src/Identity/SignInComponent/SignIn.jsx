@@ -17,6 +17,8 @@ import logo from '../../assets/5243321-removebg-preview.png';
 import useAuth from '../../Hooks/useAuth';
 import useAxiosInstance from '../../Hooks/useAxiosInstance';
 
+const imageHostingKey = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+const imageHostingApi = `https://api.imgbb.com/1/upload?key=${imageHostingKey}`;
 const SignIn = () => {
   const { createUser } = useAuth();
   const navigate = useNavigate();
@@ -35,19 +37,29 @@ const SignIn = () => {
     const gender = form.gender.value;
     const site = form.site.value;
     const image = form.image.files[0];
-    const userInfo = {
-      name,
-      address,
-      email,
-      phone,
-      birthday,
-      gender,
-      site,
-      image,
-      role: 'user',
-    };
 
+    const formData = new FormData();
+    formData.append('image', image);
     try {
+      const imageResponse = await fetch(imageHostingApi, {
+        method: 'POST',
+        body: formData,
+      });
+      const imageResult = await imageResponse.json();
+      const imageUrl = imageResult.data.url;
+
+      const userInfo = {
+        name,
+        address,
+        email,
+        phone,
+        birthday,
+        gender,
+        site,
+        image: imageUrl,
+        role: 'user',
+      };
+
       await createUser(email, password);
       const res = await axiosInstance.post('/users', userInfo);
       console.log(res.data);

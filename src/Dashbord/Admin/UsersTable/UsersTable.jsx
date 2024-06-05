@@ -123,7 +123,7 @@ const UsersTable = () => {
                 <td className="py-2 px-4 border-b">
                   {user?.role !== 'delivaryMan' && (
                     <button
-                      className="bg-green-500 btn-sm text-white px-4 rounded mr-2"
+                      className="bg-green-500 lg:btn-sm md:btn-sm btn-xs text-white px-4 rounded mr-2"
                       onClick={() => handleMakeDeliveryMan(user)}
                     >
                       Make Delivery Man
@@ -132,7 +132,7 @@ const UsersTable = () => {
 
                   {user?.role !== 'admin' && (
                     <button
-                      className="bg-blue-500 btn-sm text-white px-4  rounded"
+                      className="bg-blue-500 lg:btn-sm md:btn-sm btn-xs text-white px-4  rounded"
                       onClick={() => handleMakeAdmin(user)}
                     >
                       Make Admin

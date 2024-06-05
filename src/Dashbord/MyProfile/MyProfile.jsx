@@ -6,12 +6,12 @@ const MyProfile = () => {
   return (
     <div className="flex flex-col h-full lg:w-[1000px] lg:ml-16 lg:mt-20 md:flex-row items-center md:items-start md:space-x-8 p-4">
       {/* Left Section */}
-      <div className="border rounded-lg p-4 w-full bg-white shadow">
+      <div className="border rounded-lg p-4 w-full bg-gray-100 shadow">
         <div className="flex flex-col items-center">
           <img
             src={userInfo[0]?.image || userInfo?.image} // Placeholder image
             alt="Profile"
-            className="rounded-full w-24 h-24 mb-4"
+            className="rounded-2xl w-56 h-56 mb-4"
           />
           <div className="flex flex-col w-full">
             <label className="font-bold">NAME:</label>
@@ -32,7 +32,7 @@ const MyProfile = () => {
       </div>
 
       {/* Right Section */}
-      <div className="w-full py-3 bg-white shadow p-4 rounded-lg">
+      <div className="w-full py-12 bg-gray-100 shadow p-6 rounded-lg">
         <h2 className="text-xl font-semibold">
           {userInfo[0]?.name || userInfo?.name}
         </h2>
