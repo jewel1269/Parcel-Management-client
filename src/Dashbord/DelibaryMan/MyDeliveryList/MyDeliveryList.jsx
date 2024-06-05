@@ -22,6 +22,7 @@ const MyDeliveryList = () => {
       return res.data;
     },
   });
+  console.log(parcels);
   const [parcelData, setParcelData] = useState(parcels);
 
   const handleCancel = index => {
@@ -86,7 +87,7 @@ const MyDeliveryList = () => {
               <td className="py-2">{parcel.receiverName}</td>
               <td className="py-2">{parcel.phoneNumber}</td>
               <td className="py-2">{parcel.deliveryDate}</td>
-              <td className="py-2">{parcel.ApproximateDate}</td>
+              <td className="py-2">{parcel.approximateDate}</td>
               <td className="py-2">{parcel.receiverPhoneNumber}</td>
               <td className="py-2">{parcel.deliveryAddress}</td>
               <td className="py-2 flex justify-center space-x-2">

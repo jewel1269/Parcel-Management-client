@@ -9,6 +9,7 @@ import ReviewModal from './ReviewModal'; // Import the ReviewModal component
 const MyParcels = () => {
   const axiosInstance = useAxiosInstance();
   const { user } = useAuth();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { refetch, data: parcels = [] } = useQuery({
     queryKey: ['parcel', user?.email],
@@ -83,6 +84,13 @@ const MyParcels = () => {
       });
     }
   };
+  const openModal = parcel => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const handlePay = id => {
     console.log(`Pay for parcel with ID: ${id}`);
@@ -131,7 +139,7 @@ const MyParcels = () => {
                 </NavLink>
                 {parcel.status === 'Delivered' ? (
                   <button
-                    onClick={() => handleReview(parcel.deliveryMenId)}
+                    onClick={() => openModal(parcel)}
                     className="px-4 btn-xs bg-green-500 text-white rounded hover:bg-green-700"
                   >
                     Review
@@ -152,7 +160,13 @@ const MyParcels = () => {
                 <NavLink to={'/Dashboard/Payment'}>
                   <button
                     onClick={() => handlePay(parcel._id)}
-                    className="px-4 btn-xs bg-yellow-500 text-white rounded hover:bg-yellow-700"
+                    className={`px-4 btn-xs  text-white rounded  ${
+                      parcel.status === 'pending' ||
+                      parcel.status === 'On The Way'
+                        ? 'bg-yellow-500 hover:bg-yellow-700'
+                        : 'bg-gray-500 cursor-not-allowed'
+                    }`}
+                    disabled={parcel.status !== 'pending'}
                   >
                     Pay
                   </button>
@@ -162,6 +176,56 @@ const MyParcels = () => {
           ))}
         </tbody>
       </table>
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center">
+          <div className="bg-gray-50 p-8 lg:w-96 rounded shadow-lg">
+            <h2 className="text-xl font-bold mb-4">Manage Parcel</h2>
+            {selectedParcel && (
+              <>
+                <div className="mb-4">
+                  <label className="block mb-2">Deliveryman</label>
+                  <select
+                    value={deliveryman}
+                    onChange={e => setDeliveryman(e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded"
+                  >
+                    <option value="">Select Deliveryman</option>
+                    {deliveryMen &&
+                      deliveryMen.map(boy => (
+                        <option key={boy._id} value={boy._id}>
+                          {boy?.name}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+                <div className="mb-4">
+                  <label className="block mb-2">
+                    Approximate Delivery Date
+                  </label>
+                  <input
+                    type="date"
+                    value={deliveryDate}
+                    onChange={e => setDeliveryDate(e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+                <button
+                  className="bg-orange-400 text-white px-4 py-2 rounded mr-2"
+                  onClick={handleAssign}
+                >
+                  Assign
+                </button>
+                <button
+                  className="bg-red-500 text-white px-4 py-2 rounded"
+                  onClick={closeModal}
+                >
+                  Cancel
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -20,6 +20,12 @@ const MyProfile = () => {
               value={userInfo[0]?.name || userInfo?.name}
               className="border rounded p-1 mb-2"
             />
+            <label className="font-bold">Role:</label>
+            <input
+              type="text"
+              value={userInfo[0]?.role || userInfo?.role}
+              className="border rounded p-1 mb-2"
+            />
             <label className="font-bold">DESIGNATION:</label>
             <input
               type="text"

@@ -59,6 +59,7 @@ const AllParcel = () => {
       approximateDate: deliveryDate,
     };
     const res = await axiosInstance.post('/assignBook', updatedParcel);
+    console.log(updatedParcel);
 
     if (res.data.insertedId) {
       Swal.fire({
@@ -137,7 +138,8 @@ const AllParcel = () => {
                 <td className="py-2 px-4 border-b">{parcel.price}</td>
                 <td
                   className={`py-2 btn-xs px-4 border-b ${
-                    parcel.status === 'pending'
+                    parcel.status === 'pending' ||
+                    parcel.status === 'On The Way'
                       ? 'bg-green-500'
                       : parcel.status === 'Delivered'
                       ? 'bg-blue-500'
@@ -147,7 +149,8 @@ const AllParcel = () => {
                   {parcel.status}
                 </td>
                 <td className="py-2 px-4 border-b">
-                  {parcel?.status === 'pending' ? (
+                  {parcel?.status === 'pending' ||
+                  parcel?.status === 'On The Way' ? (
                     <button
                       className="bg-orange-400 btn-xs text-white px-4 rounded"
                       onClick={() => openModal(parcel)}
