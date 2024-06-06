@@ -87,12 +87,16 @@ const Navbar = () => {
             >
               Home
             </a>
-            <a
-              className="my-2 text-green-500 transition-colors duration-300 transform hover:text-orange-400  dark:hover:text-blue-400 md:mx-4 md:my-0"
-              href="#"
-            >
-              Dashboard
-            </a>
+            {user ? (
+              ''
+            ) : (
+              <a
+                className="my-2 text-green-500 transition-colors duration-300 transform hover:text-orange-400  dark:hover:text-blue-400 md:mx-4 md:my-0"
+                href="#"
+              >
+                Dashboard
+              </a>
+            )}
           </div>
 
           <div className="lg:flex lg:items-center gap-4">
@@ -127,7 +131,7 @@ const Navbar = () => {
                   >
                     <li className=" rounded">
                       <a className="flex justify-between hover:bg-white hover:text-black items-center px-2 py-1">
-                        <span>Name: {userInfo[0]?.name}</span>
+                        <span>Name: {userInfo[0]?.name || userInfo?.name}</span>
                       </a>
                     </li>
                     <li className=" rounded">

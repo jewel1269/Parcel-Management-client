@@ -1,43 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { FaStar } from 'react-icons/fa';
+import useAxiosInstance from '../../../Hooks/useAxiosInstance';
+import { useQuery } from '@tanstack/react-query';
 
 const DeliveryMen = () => {
-  const [deliveryMen, setDeliveryMen] = useState([]);
-
-  useEffect(() => {
-    // Simulate fetching data from the database
-    const fetchData = async () => {
-      // Replace this with your actual data fetching logic
-      const data = await new Promise(resolve => {
-        setTimeout(() => {
-          resolve([
-            {
-              name: 'John Doe',
-              image: '../../../assets/DeliveryMen/john_doe.png',
-              parcelsDelivered: 120,
-              averageRating: 4.5,
-            },
-            {
-              name: 'Jane Smith',
-              image: '../../../assets/DeliveryMen/jane_smith.png',
-              parcelsDelivered: 110,
-              averageRating: 4.7,
-            },
-            {
-              name: 'Sam Wilson',
-              image: '../../../assets/DeliveryMen/sam_wilson.png',
-              parcelsDelivered: 100,
-              averageRating: 4.6,
-            },
-          ]);
-        }, 1000);
-      });
-
-      setDeliveryMen(data);
-    };
-
-    fetchData();
-  }, []);
+  const axiosInstance = useAxiosInstance();
+  const { data: deliveryMen = [] } = useQuery({
+    queryKey: ['feature'],
+    queryFn: async () => {
+      const res = await axiosInstance.get(`/features`);
+      return res.data;
+    },
+  });
 
   return (
     <div className="container mx-auto px-4 py-12">
@@ -46,20 +20,37 @@ const DeliveryMen = () => {
         {deliveryMen.map((man, index) => (
           <div
             key={index}
-            className="p-6 border rounded-lg shadow-md text-center"
+            className="flex flex-col items-center justify-center w-full max-w-sm mx-auto m-4"
           >
-            <img
-              src={man.image}
-              alt={man.name}
-              className="mx-auto mb-4 rounded-full w-24 h-24 object-cover"
-            />
-            <h3 className="text-xl font-semibold mb-2">{man.name}</h3>
-            <p className="text-gray-600 mb-2">
-              Parcels Delivered: {man.parcelsDelivered}
-            </p>
-            <div className="flex justify-center items-center">
-              <FaStar className="text-yellow-500" />
-              <p className="text-gray-600 ml-2">{man.averageRating}</p>
+            <div
+              className="w-full h-64 bg-gray-300 bg-center bg-cover rounded-lg shadow-md"
+              style={{
+                backgroundImage: `url(${man.image})`,
+              }}
+            ></div>
+
+            <div className="w-56 -mt-10 overflow-hidden bg-white rounded-lg shadow-lg md:w-64 dark:bg-gray-800">
+              <h3 className="py-2 font-bold tracking-wide text-center text-gray-800 uppercase dark:text-white">
+                {man.name}
+              </h3>
+
+              <div className="px-3 py-2 bg-white dark:bg-gray-800 text-center">
+                <p className="text-gray-800 dark:text-gray-200">
+                  Parcels Delivered: {man.parcelsDelivered}
+                </p>
+                <p className="text-gray-800 dark:text-gray-200">
+                  Average Rating: {man.averageRating} ⭐
+                </p>
+              </div>
+
+              <div className="flex items-center justify-between px-3 py-2 bg-gray-200 dark:bg-gray-700">
+                <span className="font-bold text-gray-800 dark:text-gray-200">
+                  View Profile
+                </span>
+                <button className="px-2 py-1 text-xs font-semibold text-white uppercase transition-colors duration-300 transform bg-gray-800 rounded hover:bg-gray-700 dark:hover:bg-gray-600 focus:bg-gray-700 dark:focus:bg-gray-600 focus:outline-none">
+                  Contact
+                </button>
+              </div>
             </div>
           </div>
         ))}

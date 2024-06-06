@@ -4,12 +4,14 @@ import useAxiosInstance from '../../Hooks/useAxiosInstance';
 import useAuth from '../../Hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
-import ReviewModal from './ReviewModal'; // Import the ReviewModal component
+import useGetData from '../../Hooks/useGetData';
 
 const MyParcels = () => {
   const axiosInstance = useAxiosInstance();
   const { user } = useAuth();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userInfo] = useGetData();
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [selectedParcel, setSelectedParcel] = useState(null);
 
   const { refetch, data: parcels = [] } = useQuery({
     queryKey: ['parcel', user?.email],
@@ -20,8 +22,7 @@ const MyParcels = () => {
     },
   });
 
-  const [showReviewModal, setShowReviewModal] = useState(false);
-  const [selectedDeliveryMenId, setSelectedDeliveryMenId] = useState(null);
+  console.log(parcels);
 
   const handleCancel = parcel => {
     Swal.fire({
@@ -42,7 +43,7 @@ const MyParcels = () => {
               text: 'Your parcel has been cancelled.',
               icon: 'success',
             });
-            refetch(); // Refetch parcels after cancellation
+            refetch();
           })
           .catch(error => {
             console.error('Error cancelling parcel:', error);
@@ -56,25 +57,23 @@ const MyParcels = () => {
     });
   };
 
-  const handleReview = deliveryMenId => {
-    setSelectedDeliveryMenId(deliveryMenId);
+  const handleReview = parcel => {
+    setSelectedParcel(parcel);
     setShowReviewModal(true);
   };
 
-  const handleSubmitReview = async review => {
+  const handleSubmitReview = async (review, parcel) => {
+    console.log(review, parcel?.deliveryManEmail);
     try {
       await axiosInstance.post('/reviews', {
         ...review,
-        userName: user.name,
-        userImage: user.image,
-        userId: user._id,
       });
       Swal.fire({
         title: 'Success!',
         text: 'Your review has been submitted.',
         icon: 'success',
       });
-      // You can add additional logic here, such as updating the UI or refetching data
+      setShowReviewModal(false);
     } catch (error) {
       console.error('Error submitting review:', error);
       Swal.fire({
@@ -83,13 +82,6 @@ const MyParcels = () => {
         icon: 'error',
       });
     }
-  };
-  const openModal = parcel => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
   };
 
   const handlePay = id => {
@@ -139,7 +131,7 @@ const MyParcels = () => {
                 </NavLink>
                 {parcel.status === 'Delivered' ? (
                   <button
-                    onClick={() => openModal(parcel)}
+                    onClick={() => handleReview(parcel.deliveryMenId)}
                     className="px-4 btn-xs bg-green-500 text-white rounded hover:bg-green-700"
                   >
                     Review
@@ -166,7 +158,10 @@ const MyParcels = () => {
                         ? 'bg-yellow-500 hover:bg-yellow-700'
                         : 'bg-gray-500 cursor-not-allowed'
                     }`}
-                    disabled={parcel.status !== 'pending'}
+                    disabled={
+                      parcel.status !== 'pending' &&
+                      parcel.status !== 'On The Way'
+                    }
                   >
                     Pay
                   </button>
@@ -176,56 +171,102 @@ const MyParcels = () => {
           ))}
         </tbody>
       </table>
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center">
-          <div className="bg-gray-50 p-8 lg:w-96 rounded shadow-lg">
-            <h2 className="text-xl font-bold mb-4">Manage Parcel</h2>
-            {selectedParcel && (
-              <>
-                <div className="mb-4">
-                  <label className="block mb-2">Deliveryman</label>
-                  <select
-                    value={deliveryman}
-                    onChange={e => setDeliveryman(e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  >
-                    <option value="">Select Deliveryman</option>
-                    {deliveryMen &&
-                      deliveryMen.map(boy => (
-                        <option key={boy._id} value={boy._id}>
-                          {boy?.name}
-                        </option>
-                      ))}
-                  </select>
-                </div>
-                <div className="mb-4">
-                  <label className="block mb-2">
-                    Approximate Delivery Date
-                  </label>
-                  <input
-                    type="date"
-                    value={deliveryDate}
-                    onChange={e => setDeliveryDate(e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded"
-                  />
-                </div>
-                <button
-                  className="bg-orange-400 text-white px-4 py-2 rounded mr-2"
-                  onClick={handleAssign}
-                >
-                  Assign
-                </button>
-                <button
-                  className="bg-red-500 text-white px-4 py-2 rounded"
-                  onClick={closeModal}
-                >
-                  Cancel
-                </button>
-              </>
-            )}
-          </div>
-        </div>
+      {showReviewModal && (
+        <ReviewModal
+          isOpen={showReviewModal}
+          onClose={() => setShowReviewModal(false)}
+          onSubmit={handleSubmitReview}
+          user={userInfo}
+        />
       )}
+    </div>
+  );
+};
+
+const ReviewModal = ({ isOpen, onClose, onSubmit, user }) => {
+  const [rating, setRating] = useState(0);
+  const [feedback, setFeedback] = useState('');
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    const review = {
+      rating,
+      feedback,
+      userName: user?.name,
+      userImage: user?.image,
+    };
+    onSubmit(review);
+    onClose();
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center">
+      <div className="bg-white p-8 lg:w-96 rounded shadow-lg">
+        <h2 className="text-xl font-bold mb-4">Give Review</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block mb-2">User's Name</label>
+            <input
+              type="text"
+              value={user?.name}
+              disabled
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block mb-2">User's Image</label>
+            <input
+              type="text"
+              value={user?.image}
+              disabled
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block mb-2">Rating out of 5</label>
+            <input
+              type="number"
+              value={rating}
+              onChange={e => setRating(e.target.value)}
+              min="0"
+              max="5"
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block mb-2">Feedback</label>
+            <textarea
+              value={feedback}
+              onChange={e => setFeedback(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block mb-2">Delivery Men's ID</label>
+            <input
+              type="text"
+              value={'Not find'}
+              disabled
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+          </div>
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            Submit
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            className="bg-red-500 text-white px-4 py-2 rounded ml-2"
+          >
+            Cancel
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

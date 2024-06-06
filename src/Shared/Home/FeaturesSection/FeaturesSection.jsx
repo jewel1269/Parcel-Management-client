@@ -3,14 +3,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import CountUp from 'react-countup';
 import { AuthContext } from '../../../Componant/AuthProvider/AuthProvider';
 import useAxiosInstance from '../../../Hooks/useAxiosInstance';
+import { AccordionItem } from 'react-bootstrap';
 
 const FeaturesSection = () => {
-  const [stats, setStats] = useState({
-    parcelsBooked: 110,
-    parcelsDelivered: 230,
-    usersRegistered: 3420,
-  });
-
   const { refetch, data: AllParcels = [] } = useQuery({
     queryKey: ['AllParcel'],
     queryFn: async () => {
@@ -20,24 +15,32 @@ const FeaturesSection = () => {
   });
 
   const axiosInstance = useAxiosInstance();
-  const { data: features = [] } = useQuery({
-    queryKey: ['feature'],
+  const { data: icons = [] } = useQuery({
+    queryKey: ['icons'],
     queryFn: async () => {
-      const res = await axiosInstance.get(`/features`);
+      const res = await axiosInstance.get(`/icons`);
+      return res.data;
+    },
+  });
+  console.log(icons);
+
+  const { data: users = [] } = useQuery({
+    queryKey: ['user'],
+    queryFn: async () => {
+      const res = await axiosInstance.get(`/users`);
       return res.data;
     },
   });
 
-  // Fetch data from your database (replace with your actual API call)
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch('https://your-api.com/stats');
-      const data = await response.json();
-      setStats(data);
-    };
-
-    fetchData();
-  }, []);
+  const { data: bookingsDelivered = [] } = useQuery({
+    queryKey: ['delivered'],
+    queryFn: async () => {
+      const res = await axiosInstance.get(
+        '/bookingsDelivered?status=Delivered'
+      );
+      return res.data;
+    },
+  });
 
   return (
     <section className="features containe lg:ml-10 lg:mr-10 mx-auto py-12 px-4 md:px-8">
@@ -45,19 +48,26 @@ const FeaturesSection = () => {
         Our Powerful Features
       </h2>
       <div className="grid gap-8 md:grid-cols-3">
-        {features.map((feature, index) => (
-          <div key={index} className="rounded shadow-md p-6">
-            <div className="flex justify-center items-center">
+        {icons.map((item, index) => (
+          <div
+            key={index}
+            className="w-full max-w-md px-8 py-4 mt-16 bg-white rounded-lg shadow-lg dark:bg-gray-800"
+          >
+            <div className="flex justify-center -mt-16 md:justify-end">
               <img
-                className="text-primary  h-16  text-center w-16 "
-                src={feature.icon}
-                alt=""
+                className="object-cover w-28 h-28 border-2 p-1 border-blue-500 rounded-full dark:border-blue-400"
+                alt="Testimonial avatar"
+                src={item?.icon}
               />
             </div>
-            <h3 className="text-xl  font-bold text-center mb-2">
-              {feature.title}
-            </h3>
-            <p className="text-gray-700 mb-4">{feature.description}</p>
+
+            <h2 className="mt-2 text-xl font-semibold text-gray-800 dark:text-white md:mt-0">
+              ⭐{item.title}
+            </h2>
+
+            <p className="mt-2 text-sm text-gray-600 dark:text-gray-200">
+              🔥 {item.description}
+            </p>
           </div>
         ))}
       </div>
@@ -82,7 +92,7 @@ const FeaturesSection = () => {
         <div className="rounded h-24  shadow-md  text-center">
           <h3 className="text-xl font-medium mb-2">Total Parcels Delivered</h3>
           <CountUp
-            end={stats.parcelsDelivered}
+            end={bookingsDelivered.length}
             duration={2.5}
             separator=","
             decimals={0}
@@ -98,7 +108,7 @@ const FeaturesSection = () => {
         <div className="rounded h-24  shadow-md text-center">
           <h3 className="text-xl font-medium mb-2">Total Users</h3>
           <CountUp
-            end={stats.usersRegistered}
+            end={users.length}
             duration={2.5} // Adjust animation duration as needed
             separator=","
             decimals={0} // Adjust decimals based on your data format

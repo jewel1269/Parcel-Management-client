@@ -11,6 +11,7 @@ const MyDeliveryList = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [userInfo] = useGetData();
+  console.log(userInfo);
 
   const axiosInstance = useAxiosInstance();
   const { refetch, data: parcels = [] } = useQuery({
@@ -39,14 +40,8 @@ const MyDeliveryList = () => {
 
     const res = await axiosInstance.patch(`/updateDeliver/${parcel?.email}`, {
       status: 'Delivered',
+      deliveryManEmail: userInfo?.email,
     });
-
-    const response = await axiosInstance.patch(
-      `/updateDeliver/${parcel?.email}`,
-      {
-        status: 'Delivered',
-      }
-    );
 
     if (res.data.modifiedCount > 0) {
       alert('Success');
