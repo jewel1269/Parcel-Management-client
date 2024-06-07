@@ -42,7 +42,7 @@ const MyDeliveryList = () => {
   const handleDeliveredStatus = async id => {
     await axiosInstance.patch(`/updateDeliveredStatus/${id}`, {
       status: 'Delivered',
-      email: userInfo?.email || userInfo[0]?.email,
+      Email: userInfo?.email || userInfo[0]?.email,
     });
   };
 
@@ -50,7 +50,8 @@ const MyDeliveryList = () => {
     await handleDeliveredStatus(parcel._id);
     const res = await axiosInstance.patch(`/updateDeliver/${parcel.email}`, {
       status: 'Delivered',
-      deliveryManEmail: userInfo?.email || userInfo[0]?.email,
+      deliveryEmail: userInfo?.email || userInfo[0]?.email,
+      deLivaryId: parcel._id,
     });
 
     if (res.data.modifiedCount > 0) {

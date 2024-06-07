@@ -176,24 +176,25 @@ const MyParcels = () => {
           isOpen={showReviewModal}
           onClose={() => setShowReviewModal(false)}
           onSubmit={handleSubmitReview}
-          user={userInfo}
+          users={userInfo}
         />
       )}
     </div>
   );
 };
 
-const ReviewModal = ({ isOpen, onClose, onSubmit, user }) => {
+const ReviewModal = ({ isOpen, onClose, onSubmit, users }) => {
   const [rating, setRating] = useState(0);
   const [feedback, setFeedback] = useState('');
+  const { user } = useAuth();
 
   const handleSubmit = e => {
     e.preventDefault();
     const review = {
       rating,
       feedback,
-      userName: user?.name,
-      userImage: user?.image,
+      userName: users?.name,
+      userImage: users?.image,
     };
     onSubmit(review);
     onClose();
@@ -210,7 +211,7 @@ const ReviewModal = ({ isOpen, onClose, onSubmit, user }) => {
             <label className="block mb-2">User's Name</label>
             <input
               type="text"
-              value={user?.name}
+              value={users?.name}
               disabled
               className="w-full p-2 border border-gray-300 rounded"
             />
@@ -219,7 +220,7 @@ const ReviewModal = ({ isOpen, onClose, onSubmit, user }) => {
             <label className="block mb-2">User's Image</label>
             <input
               type="text"
-              value={user?.image}
+              value={users?.image || user?.photoURL}
               disabled
               className="w-full p-2 border border-gray-300 rounded"
             />
