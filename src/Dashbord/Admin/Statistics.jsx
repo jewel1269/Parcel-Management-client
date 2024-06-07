@@ -13,6 +13,16 @@ const Statistics = () => {
     },
   });
 
+  const { data: bookingsDelivered = [] } = useQuery({
+    queryKey: ['delivered'],
+    queryFn: async () => {
+      const res = await axiosInstance.get(
+        '/bookingsDelivered?status=Delivered'
+      );
+      return res.data;
+    },
+  });
+
   const lineChartData = {
     series: [
       {
@@ -112,7 +122,9 @@ const Statistics = () => {
         </div>
         <div className="bg-white shadow rounded-lg p-4">
           <h2 className="text-xl font-semibold">Delivared</h2>
-          <p className="text-3xl font-bold text-green-600">232,000</p>
+          <p className="text-3xl font-bold text-green-600">
+            {bookingsDelivered.length}
+          </p>
         </div>
         <div className="bg-white shadow rounded-lg p-4">
           <h2 className="text-xl font-semibold">Profile Strength</h2>

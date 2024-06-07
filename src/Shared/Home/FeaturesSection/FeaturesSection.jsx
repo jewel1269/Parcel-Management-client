@@ -44,7 +44,7 @@ const FeaturesSection = () => {
 
   return (
     <section className="features containe lg:ml-10 lg:mr-10 mx-auto py-12 px-4 md:px-8">
-      <h2 className="text-3xl font-bold text-center mb-8">
+      <h2 className="text-3xl font-bold italic text-yellow-500 text-center mb-8">
         Our Powerful Features
       </h2>
       <div className="grid gap-8 md:grid-cols-3">
@@ -73,7 +73,7 @@ const FeaturesSection = () => {
       </div>
 
       <div className="grid gap-8 mt-12 md:grid-cols-3">
-        <div className="rounded h-24 shadow-md  text-center">
+        <div className="rounded bg-gradient-to-r from-green-100 to-blue-100 hover:from-pink-100 hover:to-yellow-100 h-24  shadow-md  text-center">
           <h3 className="text-xl font-medium mb-2">Total Parcels Booked</h3>
           <CountUp
             end={AllParcels.length}
@@ -89,7 +89,7 @@ const FeaturesSection = () => {
             )}
           </CountUp>
         </div>
-        <div className="rounded h-24  shadow-md  text-center">
+        <div className="rounded h-24 bg-gradient-to-r from-green-100 to-blue-100 hover:from-pink-100 hover:to-yellow-100  shadow-md  text-center">
           <h3 className="text-xl font-medium mb-2">Total Parcels Delivered</h3>
           <CountUp
             end={bookingsDelivered.length}
@@ -105,7 +105,7 @@ const FeaturesSection = () => {
             )}
           </CountUp>
         </div>
-        <div className="rounded h-24  shadow-md text-center">
+        <div className="rounded h-24 bg-gradient-to-r from-green-100 to-blue-100 hover:from-pink-100 hover:to-yellow-100   shadow-md text-center">
           <h3 className="text-xl font-medium mb-2">Total Users</h3>
           <CountUp
             end={users.length}

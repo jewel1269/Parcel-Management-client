@@ -13,7 +13,7 @@ const Footer = () => {
     <div className="relative overflow-hidden bg-gray-200 py-10">
       <div className="absolute inset-0">
         <div
-          className="wave bg-cover"
+          className="wave lg:mt-0 md:mt-0 mt-[580px] bg-cover"
           style={{
             backgroundImage: `url('data:image/svg+xml;utf8,<svg viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg"><path fill="%23a7f3d0" fill-opacity="1" d="M0,96L48,128C96,160,192,224,288,229.3C384,235,480,181,576,149.3C672,117,768,107,864,122.7C960,139,1056,181,1152,186.7C1248,192,1344,160,1392,144L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>')`,
           }}

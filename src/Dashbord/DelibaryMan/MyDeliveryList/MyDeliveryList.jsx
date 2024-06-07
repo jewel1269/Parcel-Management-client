@@ -1,19 +1,18 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import useAxiosInstance from '../../../Hooks/useAxiosInstance';
 import { useQuery } from '@tanstack/react-query';
 import useGetData from '../../../Hooks/useGetData';
-
-// Sample data
+import Swal from 'sweetalert2';
 
 const MyDeliveryList = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [userInfo] = useGetData();
-  console.log(userInfo);
 
   const axiosInstance = useAxiosInstance();
+
   const { refetch, data: parcels = [] } = useQuery({
     queryKey: ['parcels', userInfo?.email],
     queryFn: async () => {
@@ -22,33 +21,47 @@ const MyDeliveryList = () => {
       );
       return res.data;
     },
+    enabled: !!userInfo?.email, // Ensure the query runs only when email is available
   });
-  console.log(parcels);
-  const [parcelData, setParcelData] = useState(parcels);
 
-  const handleCancel = index => {
+  const handleCancel = async index => {
     if (window.confirm('Are you sure you want to cancel this delivery?')) {
-      const updatedParcels = [...parcelData];
+      const updatedParcels = [...parcels];
       updatedParcels[index].status = 'Cancelled';
-      setParcelData(updatedParcels);
+      await axiosInstance.patch(
+        `/updateDeliveredStatus/${parcels[index]._id}`,
+        {
+          status: 'Cancelled',
+          email: userInfo?.email || userInfo[0]?.email,
+        }
+      );
+      refetch();
     }
   };
-  console.log(parcelData);
+
+  const handleDeliveredStatus = async id => {
+    await axiosInstance.patch(`/updateDeliveredStatus/${id}`, {
+      status: 'Delivered',
+      email: userInfo?.email || userInfo[0]?.email,
+    });
+  };
 
   const handleDeliver = async parcel => {
-    console.log(parcel);
-
-    const res = await axiosInstance.patch(`/updateDeliver/${parcel?.email}`, {
+    await handleDeliveredStatus(parcel._id);
+    const res = await axiosInstance.patch(`/updateDeliver/${parcel.email}`, {
       status: 'Delivered',
-      deliveryManEmail: userInfo?.email,
+      deliveryManEmail: userInfo?.email || userInfo[0]?.email,
     });
 
     if (res.data.modifiedCount > 0) {
-      alert('Success');
+      Swal.fire('Error', 'No updates made', 'error');
     } else {
-      alert('No updates made');
+      Swal.fire('Success', 'Parcel marked as delivered!', 'success');
     }
+
+    refetch();
   };
+
   const openModal = (latitude, longitude) => {
     setSelectedLocation({ latitude, longitude });
     setModalIsOpen(true);
@@ -90,19 +103,37 @@ const MyDeliveryList = () => {
                   className="bg-blue-500 btn-xs text-white px-3 py-1 rounded"
                   onClick={() => openModal(parcel.latitude, parcel.longitude)}
                 >
-                  View Location
+                  Location
                 </button>
+
+                {parcel.status === 'Delivered' ? (
+                  <button className="btn-xs text-white bg-orange-500 px-3 py-1 rounded ">
+                    delete
+                  </button>
+                ) : (
+                  <button
+                    className={`btn-xs text-white px-3 py-1 rounded ${
+                      parcel.status === 'Cancelled'
+                        ? 'bg-gray-400'
+                        : 'bg-red-500'
+                    }`}
+                    onClick={() => handleCancel(index)}
+                    disabled={parcel.status === 'Cancelled'}
+                  >
+                    {parcel.status === 'Cancelled' ? 'Cancelled' : 'Cancel'}
+                  </button>
+                )}
                 <button
-                  className="bg-red-500 btn-xs text-white px-3 py-1 rounded"
-                  onClick={() => handleCancel(index)}
-                >
-                  Cancel
-                </button>
-                <button
-                  className="bg-green-500 btn-xs text-white px-3 py-1 rounded"
+                  className={`btn-xs text-white px-3 py-1 rounded ${
+                    parcel.status === 'Delivered' ||
+                    parcel.status === 'Cancelled'
+                      ? 'bg-gray-400'
+                      : 'bg-green-500'
+                  }`}
                   onClick={() => handleDeliver(parcel)}
+                  disabled={parcel.status === 'Delivered'}
                 >
-                  Deliver
+                  {parcel.status === 'Delivered' ? 'Delivered' : 'Deliver'}
                 </button>
               </td>
             </tr>
@@ -122,10 +153,9 @@ const MyDeliveryList = () => {
             center={[selectedLocation.latitude, selectedLocation.longitude]}
             zoom={13}
             scrollWheelZoom={false}
-            style={{ width: '100%', height: '1000px' }}
+            style={{ width: '600px', height: '400px' }}
           >
             <TileLayer
-              className="w-[1200px]"
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />

@@ -114,7 +114,7 @@ const Navbar = () => {
                     role="button"
                     className="btn btn-ghost btn-circle avatar"
                   >
-                    <div className="w-8 rounded-full border-2 border-gray-200 hover:border-gray-400 transition duration-300">
+                    <div className="w-8 lg:mr-0 md:mr-0 mr-3 rounded-full border-2 border-gray-200 hover:border-gray-400 transition duration-300">
                       {user ? (
                         <img alt="User Avatar" src={userInfo[0]?.image} />
                       ) : (
@@ -125,51 +125,55 @@ const Navbar = () => {
                       )}
                     </div>
                   </div>
-                  <ul
-                    tabIndex={0}
-                    className="menu menu-sm dropdown-content  mt-3 z-[1] p-2 shadow-lg text-white rounded-lg w-52 border border-gray-200"
-                  >
-                    <li className=" rounded">
-                      <a className="flex justify-between hover:bg-white hover:text-black items-center px-2 py-1">
-                        <span>Name: {userInfo[0]?.name || userInfo?.name}</span>
-                      </a>
-                    </li>
-                    <li className=" rounded">
-                      {role === 'admin' && (
-                        <NavLink
-                          to={'Dashboard/Statistics'}
-                          className="flex text-start items-center hover:bg-white hover:text-black px-2 py-1"
-                        >
-                          Dashboard
-                        </NavLink>
-                      )}
-                      {role === 'delivaryMan' && (
-                        <NavLink
-                          to={'Dashboard/MyDeliveryList'}
-                          className="flex text-start items-center hover:bg-white hover:text-black px-2 py-1"
-                        >
-                          Dashboard
-                        </NavLink>
-                      )}
+                  <div className="lg:ml-0 md:ml-0 ml-48">
+                    <ul
+                      tabIndex={0}
+                      className="menu menu-sm  dropdown-content mt-3 z-[1] p-2 shadow-lg text-white rounded-lg w-52 border border-gray-100"
+                    >
+                      <li className=" lg:text-white md:text-white text-orange-500  rounded">
+                        <a className="flex justify-between hover:bg-white hover:text-black items-center px-2 py-1">
+                          <span>
+                            Name: {userInfo[0]?.name || userInfo?.name}
+                          </span>
+                        </a>
+                      </li>
+                      <li className="lg:text-white md:text-white text-orange-500  rounded">
+                        {role === 'admin' && (
+                          <NavLink
+                            to={'Dashboard/Statistics'}
+                            className="flex text-start items-center hover:bg-white hover:text-black px-2 py-1"
+                          >
+                            Dashboard
+                          </NavLink>
+                        )}
+                        {role === 'delivaryMan' && (
+                          <NavLink
+                            to={'Dashboard/MyDeliveryList'}
+                            className="flex text-start items-center hover:bg-white hover:text-black px-2 py-1"
+                          >
+                            Dashboard
+                          </NavLink>
+                        )}
 
-                      {role === 'user' && (
-                        <NavLink
-                          to={'Dashboard/MyProfile'}
-                          className="flex text-start items-center hover:bg-white hover:text-black px-2 py-1"
+                        {role === 'user' && (
+                          <NavLink
+                            to={'Dashboard/MyProfile'}
+                            className="flex text-start items-center hover:bg-white hover:text-black px-2 py-1"
+                          >
+                            Dashboard
+                          </NavLink>
+                        )}
+                      </li>
+                      <li className=" lg:text-white md:text-white text-orange-500  rounded">
+                        <a
+                          onClick={handleLogOut}
+                          className="flex items-center hover:bg-white hover:text-black px-2 py-1"
                         >
-                          Dashboard
-                        </NavLink>
-                      )}
-                    </li>
-                    <li className=" rounded">
-                      <a
-                        onClick={handleLogOut}
-                        className="flex items-center hover:bg-white hover:text-black px-2 py-1"
-                      >
-                        Logout
-                      </a>
-                    </li>
-                  </ul>
+                          Logout
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             ) : (
