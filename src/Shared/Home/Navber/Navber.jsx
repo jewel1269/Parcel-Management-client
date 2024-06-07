@@ -116,7 +116,15 @@ const Navbar = () => {
                   >
                     <div className="w-8 lg:mr-0 md:mr-0 mr-3 rounded-full border-2 border-gray-200 hover:border-gray-400 transition duration-300">
                       {user ? (
-                        <img alt="User Avatar" src={userInfo[0]?.image} />
+                        <img
+                          className="lg:h-12 lg:w-12"
+                          alt="User Avatar"
+                          src={
+                            userInfo[0]?.image ||
+                            user?.photoURL ||
+                            userInfo?.image
+                          }
+                        />
                       ) : (
                         <img
                           alt="User Avatar"

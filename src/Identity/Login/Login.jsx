@@ -18,6 +18,7 @@ import useAuth from '../../Hooks/useAuth';
 import { GoogleAuthProvider } from 'firebase/auth';
 import Swal from 'sweetalert2';
 import useAxiosInstance from '../../Hooks/useAxiosInstance';
+import { toast } from 'react-toastify';
 
 const googleProvider = new GoogleAuthProvider();
 const Login = () => {
@@ -68,13 +69,7 @@ const Login = () => {
         navigate('/');
       });
     });
-    Swal.fire({
-      position: 'top-center',
-      icon: 'success',
-      title: 'Successfully LoggedIn',
-      showConfirmButton: false,
-      timer: 1500,
-    });
+    toast.success('Successfully Login');
     navigate(location.state);
   };
   const toggleShowPassword = () => {

@@ -17,11 +17,11 @@ const MyDeliveryList = () => {
     queryKey: ['parcels', userInfo?.email],
     queryFn: async () => {
       const res = await axiosInstance.get(
-        `/assignBook?email=${userInfo?.email}`
+        `/deliverAssignBook?email=${userInfo?.email || userInfo[0]?.email}`
       );
       return res.data;
     },
-    enabled: !!userInfo?.email, // Ensure the query runs only when email is available
+    enabled: !!userInfo?.email,
   });
 
   const handleCancel = async index => {

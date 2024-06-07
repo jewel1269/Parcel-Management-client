@@ -16,6 +16,7 @@ import {
 import logo from '../../assets/5243321-removebg-preview.png';
 import useAuth from '../../Hooks/useAuth';
 import useAxiosInstance from '../../Hooks/useAxiosInstance';
+import { toast } from 'react-toastify';
 
 const imageHostingKey = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const imageHostingApi = `https://api.imgbb.com/1/upload?key=${imageHostingKey}`;
@@ -34,6 +35,7 @@ const SignIn = () => {
     const phone = form.phone.value;
     const password = form.password.value;
     const birthday = form.birthday.value;
+    const role = form.role.value;
     const gender = form.gender.value;
     const site = form.site.value;
     const image = form.image.files[0];
@@ -57,14 +59,14 @@ const SignIn = () => {
         gender,
         site,
         image: imageUrl,
-        role: 'user',
+        role,
       };
 
       await createUser(email, password);
       const res = await axiosInstance.post('/users', userInfo);
       console.log(res.data);
       if (res.data.insertedId) {
-        alert('Successfully added');
+        toast.success('Registation Complete');
         navigate('/');
       }
     } catch (error) {
@@ -184,6 +186,21 @@ const SignIn = () => {
                   className="appearance-none mt-2 rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                   required
                 />
+              </div>
+              <div>
+                <label htmlFor="gender" className="sr-only">
+                  Role
+                </label>
+                <select
+                  id="role"
+                  name="role"
+                  className="appearance-none mt-2 rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  required
+                >
+                  <option value="role">Role</option>
+                  <option value="user">User</option>
+                  <option value="delivaryMan">DelivaryMan</option>
+                </select>
               </div>
               <div>
                 <label htmlFor="gender" className="sr-only">
