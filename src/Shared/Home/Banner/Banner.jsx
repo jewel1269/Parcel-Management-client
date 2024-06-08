@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import bgImage from '../../../assets/rm373batch2-02.jpg';
-import deliver from '../../../assets/160139-OV2ZS8-552-removebg-preview (1).png';
+import deliver from '../../../assets/Features/160139-OV2ZS8-552-removebg-preview (1).png';
 import '../Banner/Banner.css';
 
 const Banner = () => {

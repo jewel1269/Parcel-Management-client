@@ -49,6 +49,9 @@ const AllParcel = () => {
   const handleAssignStatus = async id => {
     await axiosInstance.patch(`/updateDeliverBooking/${id}`, {
       status: 'On The Way',
+      delivaryId: id,
+      assignedDeliveryman: deliveryman,
+      approximateDate: deliveryDate,
     });
   };
 
@@ -57,6 +60,7 @@ const AllParcel = () => {
       ...selectedParcel,
       assignedDeliveryman: deliveryman,
       approximateDate: deliveryDate,
+      image: userInfo?.image || user?.photoURL || userInfo[0]?.image,
     };
     const res = await axiosInstance.post('/assignBook', updatedParcel);
     console.log(updatedParcel);
@@ -88,7 +92,9 @@ const AllParcel = () => {
 
   return (
     <div className="container overflow-x-auto mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">All Parcels</h1>
+      <h1 className="text-2xl font-bold mb-4">
+        All Parcels <span>({AllParcels.length})</span>
+      </h1>
 
       {/* Date Range Filter */}
       <div className="mb-4">

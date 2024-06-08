@@ -23,6 +23,7 @@ const MyDeliveryList = () => {
     },
     enabled: !!userInfo?.email,
   });
+  console.log(parcels);
 
   const handleCancel = async index => {
     if (window.confirm('Are you sure you want to cancel this delivery?')) {
@@ -47,20 +48,27 @@ const MyDeliveryList = () => {
   };
 
   const handleDeliver = async parcel => {
-    await handleDeliveredStatus(parcel._id);
-    const res = await axiosInstance.patch(`/updateDeliver/${parcel.email}`, {
-      status: 'Delivered',
-      deliveryEmail: userInfo?.email || userInfo[0]?.email,
-      deLivaryId: parcel._id,
-    });
+    try {
+      const res = await axiosInstance.patch(
+        `/updateDeliver/${parcel.bokingId}`,
+        {
+          status: 'Delivered',
+        }
+      );
 
-    if (res.data.modifiedCount > 0) {
-      Swal.fire('Error', 'No updates made', 'error');
-    } else {
-      Swal.fire('Success', 'Parcel marked as delivered!', 'success');
+      await handleDeliveredStatus(parcel._id);
+
+      if (res.data.modifiedCount === 0) {
+        Swal.fire('Error', 'No updates made', 'error');
+      } else {
+        Swal.fire('Success', 'Parcel marked as delivered!', 'success');
+      }
+
+      refetch();
+    } catch (error) {
+      console.error('Error delivering parcel:', error);
+      Swal.fire('Error', 'Failed to deliver parcel', 'error');
     }
-
-    refetch();
   };
 
   const openModal = (latitude, longitude) => {

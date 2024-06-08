@@ -5,7 +5,7 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   FaGoogle,
   FaFacebook,
@@ -23,6 +23,7 @@ import { toast } from 'react-toastify';
 const googleProvider = new GoogleAuthProvider();
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { signIn, googleLogin, githubLogin } = useAuth();
   const axiosInstance = useAxiosInstance();
   const [showPassword, setShowPassword] = useState(false);
@@ -47,7 +48,7 @@ const Login = () => {
     signIn(formData.email, formData.password)
       .then(res => {
         console.log(res.user);
-        navigate('/');
+        navigate(location.state) || navigate('/');
       })
       .then(error => console.log(error));
 
@@ -66,11 +67,10 @@ const Login = () => {
       };
       axiosInstance.post('/users', userFind).then(res => {
         console.log(res.data);
-        navigate('/');
       });
     });
     toast.success('Successfully Login');
-    navigate(location.state);
+    navigate(location.state) || navigate('/');
   };
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);

@@ -9,17 +9,20 @@ import useGetData from '../../../Hooks/useGetData';
 const DeliveryMenTable = () => {
   const axiosInstance = useAxiosInstance();
 
-  const { data: deliveryMen } = useQuery({
+  const { data: deliveryMen = [] } = useQuery({
     queryKey: ['deliveryMen'],
     queryFn: async () => {
       const res = await axiosInstance.get('/Delivar?role=delivaryMan');
       return res.data;
     },
   });
+  console.log(deliveryMen);
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Delivery Men</h1>
+      <h1 className="text-2xl font-bold mb-4">
+        Delivery Men <span>({deliveryMen.length})</span>
+      </h1>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200">
           <thead>

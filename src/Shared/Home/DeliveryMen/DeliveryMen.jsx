@@ -38,10 +38,10 @@ const DeliveryMen = () => {
 
               <div className="px-3 py-2 bg-white dark:bg-gray-800 text-center">
                 <p className="text-gray-800 dark:text-gray-200">
-                  Parcels Delivered: {man.parcelsDelivered}
+                  Parcels Delivered: <strong>{man.parcelsDelivered}</strong>
                 </p>
                 <p className="text-gray-800 dark:text-gray-200">
-                  Average Rating: {man.averageRating} ⭐
+                  Average Rating: <strong>{man.averageRating}</strong> ⭐
                 </p>
               </div>
 

@@ -15,6 +15,7 @@ import UsersTable from '../Dashbord/Admin/UsersTable/UsersTable';
 import MyDeliveryList from '../Dashbord/DelibaryMan/MyDeliveryList/MyDeliveryList';
 import MyReviews from '../Dashbord/DelibaryMan/MyReviews/MyReviews';
 import UpdateBooking from '../Dashbord/Admin/UsersTable/Update/UpdateBooking';
+import PrivateRoute from '../Hooks/Private/PrivteRoute';
 
 export const router = createBrowserRouter([
   {
@@ -43,11 +44,19 @@ export const router = createBrowserRouter([
       //user
       {
         path: 'BookParcel',
-        element: <BookParcel />,
+        element: (
+          <PrivateRoute>
+            <BookParcel />,
+          </PrivateRoute>
+        ),
       },
       {
         path: 'MyParcels',
-        element: <MyParcels />,
+        element: (
+          <PrivateRoute>
+            <MyParcels />,
+          </PrivateRoute>
+        ),
       },
       {
         path: 'Payment',

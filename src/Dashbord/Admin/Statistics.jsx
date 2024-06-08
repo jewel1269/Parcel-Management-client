@@ -112,24 +112,20 @@ const Statistics = () => {
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white shadow rounded-lg p-4">
-          <h2 className="text-xl font-semibold">Earnings</h2>
-          <p className="text-3xl font-bold text-blue-600">$2723</p>
-        </div>
-        <div className="bg-white shadow rounded-lg p-4">
+        <div className="bg-white lg:h-32 md:36 shadow rounded-lg p-4">
           <h2 className="text-xl font-semibold">Bookings</h2>
           <p className="text-3xl font-bold text-yellow-600">{series.length}</p>
         </div>
-        <div className="bg-white shadow rounded-lg p-4">
+        <div className="bg-white lg:h-32 md:36 shadow rounded-lg p-4">
           <h2 className="text-xl font-semibold">Delivared</h2>
           <p className="text-3xl font-bold text-green-600">
             {bookingsDelivered.length}
           </p>
         </div>
-        <div className="bg-white shadow rounded-lg p-4">
+        <div className="bg-white lg:h-44 shadow rounded-lg p-4">
           <h2 className="text-xl font-semibold">Profile Strength</h2>
           <div className="flex justify-center items-center">
-            <div className="relative w-32 h-28 lg:mt-10">
+            <div className="relative w-24 h-20 lg:mt-3">
               <div className="absolute inset-0 flex items-center justify-center">
                 <span className="text-2xl font-bold">75%</span>
               </div>

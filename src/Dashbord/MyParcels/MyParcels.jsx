@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import useAxiosInstance from '../../Hooks/useAxiosInstance';
 import useAuth from '../../Hooks/useAuth';
@@ -12,6 +12,7 @@ const MyParcels = () => {
   const [userInfo] = useGetData();
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [selectedParcel, setSelectedParcel] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState('All');
 
   const { refetch, data: parcels = [] } = useQuery({
     queryKey: ['parcel', user?.email],
@@ -22,8 +23,15 @@ const MyParcels = () => {
     },
   });
 
-  console.log(parcels);
-
+  const filteredParcels =
+    selectedStatus === 'All'
+      ? parcels
+      : parcels.filter(
+          parcel =>
+            parcel &&
+            parcel.status &&
+            parcel.status.toLowerCase() === selectedStatus.toLowerCase()
+        );
   const handleCancel = parcel => {
     Swal.fire({
       title: 'Are you sure?',
@@ -63,10 +71,20 @@ const MyParcels = () => {
   };
 
   const handleSubmitReview = async (review, parcel) => {
+    if (review.rating > 5) {
+      Swal.fire({
+        title: 'Error!',
+        text: 'Rating cannot be more than 5.',
+        icon: 'error',
+      });
+      return;
+    }
     console.log(review, parcel?.deliveryManEmail);
     try {
       await axiosInstance.post('/reviews', {
         ...review,
+        deliveryManEmail: parcel?.deliveryManEmail,
+        parcelId: parcel?._id,
       });
       Swal.fire({
         title: 'Success!',
@@ -88,9 +106,26 @@ const MyParcels = () => {
     console.log(`Pay for parcel with ID: ${id}`);
   };
 
+  const handleStatusChange = event => {
+    setSelectedStatus(event.target.value);
+  };
+
   return (
     <div className="container overflow-x-auto mx-auto p-4">
       <h2 className="text-2xl font-bold mb-4">My Parcels</h2>
+      <div className="mb-4">
+        <label className="mr-2">Filter by Status:</label>
+        <select
+          value={selectedStatus}
+          onChange={handleStatusChange}
+          className="border border-gray-300 rounded px-2 py-1"
+        >
+          <option value="All">All</option>
+          <option value="pending">Pending</option>
+          <option value="Delivered">Delivered</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+      </div>
       <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow">
         <thead>
           <tr className="w-full bg-gray-200">
@@ -104,16 +139,14 @@ const MyParcels = () => {
           </tr>
         </thead>
         <tbody>
-          {parcels.map(parcel => (
+          {filteredParcels.map(parcel => (
             <tr key={parcel._id} className="hover:bg-gray-100">
               <td className="py-2 px-4 border-b">{parcel.parcelType}</td>
               <td className="py-2 px-4 border-b">{parcel.deliveryDate}</td>
-              <td className="py-2 px-4 border-b">
-                {parcel.approximateDeliveryDate}
-              </td>
+              <td className="py-2 px-4 border-b">{parcel.approximateDate}</td>
               <td className="py-2 px-4 border-b">{parcel.bookingDate}</td>
               <td className="py-2 px-4 border-b">
-                {parcel.deliveryMenId || 'N/A'}
+                {parcel.delivaryId || 'N/A'}
               </td>
               <td className="py-2 px-4 border-b capitalize">{parcel.status}</td>
               <td className="py-2 px-4 border-b space-x-2">
@@ -131,7 +164,7 @@ const MyParcels = () => {
                 </NavLink>
                 {parcel.status === 'Delivered' ? (
                   <button
-                    onClick={() => handleReview(parcel.deliveryMenId)}
+                    onClick={() => handleReview(parcel)}
                     className="px-4 btn-xs bg-green-500 text-white rounded hover:bg-green-700"
                   >
                     Review
@@ -152,7 +185,7 @@ const MyParcels = () => {
                 <NavLink to={'/Dashboard/Payment'}>
                   <button
                     onClick={() => handlePay(parcel._id)}
-                    className={`px-4 btn-xs  text-white rounded  ${
+                    className={`px-4 btn-xs text-white rounded ${
                       parcel.status === 'pending' ||
                       parcel.status === 'On The Way'
                         ? 'bg-yellow-500 hover:bg-yellow-700'
@@ -177,13 +210,14 @@ const MyParcels = () => {
           onClose={() => setShowReviewModal(false)}
           onSubmit={handleSubmitReview}
           users={userInfo}
+          parcel={selectedParcel}
         />
       )}
     </div>
   );
 };
 
-const ReviewModal = ({ isOpen, onClose, onSubmit, users }) => {
+const ReviewModal = ({ isOpen, onClose, onSubmit, users, parcel }) => {
   const [rating, setRating] = useState(0);
   const [feedback, setFeedback] = useState('');
   const { user } = useAuth();
@@ -194,9 +228,10 @@ const ReviewModal = ({ isOpen, onClose, onSubmit, users }) => {
       rating,
       feedback,
       userName: users?.name,
-      userImage: users?.image,
+      userImage: users?.image || user?.photoURL,
+      reviewDate: new Date(),
     };
-    onSubmit(review);
+    onSubmit(review, parcel);
     onClose();
   };
 
@@ -245,10 +280,10 @@ const ReviewModal = ({ isOpen, onClose, onSubmit, users }) => {
             />
           </div>
           <div className="mb-4">
-            <label className="block mb-2">Delivery Men's ID</label>
+            <label className="block mb-2">Delivery Man's Email</label>
             <input
               type="text"
-              value={'Not find'}
+              value={parcel?.delivaryId}
               disabled
               className="w-full p-2 border border-gray-300 rounded"
             />

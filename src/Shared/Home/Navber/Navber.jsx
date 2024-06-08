@@ -90,12 +90,14 @@ const Navbar = () => {
             {user ? (
               ''
             ) : (
-              <a
-                className="my-2 text-green-500 transition-colors duration-300 transform hover:text-orange-400  dark:hover:text-blue-400 md:mx-4 md:my-0"
-                href="#"
-              >
-                Dashboard
-              </a>
+              <NavLink to={'Dashboard/MyProfile'}>
+                <a
+                  className="my-2 text-green-500 transition-colors duration-300 transform hover:text-orange-400  dark:hover:text-blue-400 md:mx-4 md:my-0"
+                  href="#"
+                >
+                  Dashboard
+                </a>
+              </NavLink>
             )}
           </div>
 
