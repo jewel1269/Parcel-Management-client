@@ -5,6 +5,7 @@ import useAxiosInstance from '../../Hooks/useAxiosInstance';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../../Hooks/useAuth';
+import { Helmet } from 'react-helmet-async';
 
 const BookParcel = () => {
   const [userInfo] = useGetData();
@@ -78,6 +79,9 @@ const BookParcel = () => {
 
   return (
     <div className="w-full  mt-10 p-8 bg-white shadow-lg rounded-lg">
+      <Helmet>
+        <title>Parcel Patah | Book Parcel</title>
+      </Helmet>
       <h1 className="text-3xl font-bold text-center mb-6">Book a Parcel</h1>
       <form
         onSubmit={handleSubmit}

@@ -122,7 +122,9 @@ export const router = createBrowserRouter([
         path: 'UpdateBooking/:id',
         element: <UpdateBooking />,
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/bookings/${params.id}`),
+          fetch(
+            `https://parcel-system-manageent-server.vercel.app/bookings/${params.id}`
+          ),
       },
     ],
   },

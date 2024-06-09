@@ -4,6 +4,7 @@ import useAuth from '../../../Hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
 import useGetData from '../../../Hooks/useGetData';
 import Swal from 'sweetalert2';
+import { Helmet } from 'react-helmet-async';
 
 const AllParcel = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -93,6 +94,9 @@ const AllParcel = () => {
 
   return (
     <div className="container overflow-x-auto mx-auto p-4">
+      <Helmet>
+        <title>Parcel Patah | All Parcels</title>
+      </Helmet>
       <h1 className="text-2xl font-bold mb-4">
         All Parcels <span>({AllParcels.length})</span>
       </h1>

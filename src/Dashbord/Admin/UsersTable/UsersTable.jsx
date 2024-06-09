@@ -3,6 +3,7 @@ import useAxiosInstance from '../../../Hooks/useAxiosInstance';
 import useAuth from '../../../Hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
+import { Helmet } from 'react-helmet-async';
 
 // Function to generate a random number within a specified range
 const getRandomNumber = (min, max) =>
@@ -102,6 +103,9 @@ const UsersTable = () => {
 
   return (
     <div className="container mx-auto p-4">
+      <Helmet>
+        <title>Parcel Patah | All UsMyers</title>
+      </Helmet>
       <h1 className="text-2xl font-bold mb-4">
         All Users <span>({users.length})</span>
       </h1>

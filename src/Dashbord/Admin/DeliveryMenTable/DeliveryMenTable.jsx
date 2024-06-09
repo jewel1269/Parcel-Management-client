@@ -1,6 +1,7 @@
 import React from 'react';
 import useAxiosInstance from '../../../Hooks/useAxiosInstance';
 import { useQuery } from '@tanstack/react-query';
+import { Helmet } from 'react-helmet-async';
 
 // Mock data for delivery men
 
@@ -22,6 +23,9 @@ const DeliveryMenTable = () => {
 
   return (
     <div className="container mx-auto p-4">
+      <Helmet>
+        <title>Parcel Patah | All Delivary Man</title>
+      </Helmet>
       <h1 className="text-2xl font-bold mb-4">
         Delivery Men <span>({deliveryMen.length})</span>
       </h1>

@@ -5,6 +5,7 @@ import useAxiosInstance from '../../../Hooks/useAxiosInstance';
 import { useQuery } from '@tanstack/react-query';
 import useGetData from '../../../Hooks/useGetData';
 import Swal from 'sweetalert2';
+import { Helmet } from 'react-helmet-async';
 
 const MyDeliveryList = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -108,6 +109,9 @@ const MyDeliveryList = () => {
 
   return (
     <div className="container overflow-x-auto mx-auto p-4">
+      <Helmet>
+        <title>Parcel Patah | Delivary List</title>
+      </Helmet>
       <h1 className="text-2xl font-bold mb-4">Assigned Parcels</h1>
       <table className="min-w-full bg-white">
         <thead>

@@ -17,6 +17,7 @@ import logo from '../../assets/5243321-removebg-preview.png';
 import useAuth from '../../Hooks/useAuth';
 import useAxiosInstance from '../../Hooks/useAxiosInstance';
 import { toast } from 'react-toastify';
+import { Helmet } from 'react-helmet-async';
 
 const imageHostingKey = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const imageHostingApi = `https://api.imgbb.com/1/upload?key=${imageHostingKey}`;
@@ -81,6 +82,9 @@ const SignIn = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <Helmet>
+        <title>Parcel Patah | Sign Up</title>
+      </Helmet>
       <div className="max-w-6xl w-full bg-white shadow-lg rounded-lg p-8 space-y-8 md:flex md:space-y-0 md:space-x-8">
         <div className=" md:block w-1/2">
           <img

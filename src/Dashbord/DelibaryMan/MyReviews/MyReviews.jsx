@@ -3,6 +3,7 @@ import useAxiosInstance from '../../../Hooks/useAxiosInstance';
 import { useQuery } from '@tanstack/react-query';
 import useGetData from '../../../Hooks/useGetData';
 import useAuth from '../../../Hooks/useAuth';
+import { Helmet } from 'react-helmet-async';
 
 const MyReviews = () => {
   const [userInfo] = useGetData();
@@ -26,6 +27,9 @@ const MyReviews = () => {
 
   return (
     <div className="container mx-auto p-4">
+      <Helmet>
+        <title>Parcel Patah | Reviews</title>
+      </Helmet>
       <h1 className="text-2xl font-bold mb-4">My Reviews</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {reviews.map(review => (

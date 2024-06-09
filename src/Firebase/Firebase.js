@@ -5,14 +5,15 @@ import { initializeApp } from 'firebase/app';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyCehs6vgbQ_KJ3ndQdOh6Eqzy0KR7HvzaA',
-  authDomain: 'parcel-system-management.firebaseapp.com',
-  projectId: 'parcel-system-management',
-  storageBucket: 'parcel-system-management.appspot.com',
-  messagingSenderId: '927552726326',
-  appId: '1:927552726326:web:8aba00a4911d9f863d3f97',
+  apiKey: import.meta.env.VITE_APIKEY,
+  authDomain: import.meta.env.VITE_AUTHDOMAIN,
+  projectId: import.meta.env.VITE_PROJECTID,
+  storageBucket: import.meta.env.VITE_STORAGEBUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGINGSENDERID,
+  appId: import.meta.env.VITE_APPID,
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
 export default app;

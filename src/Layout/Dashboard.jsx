@@ -9,6 +9,7 @@ import { FaUsersGear } from 'react-icons/fa6';
 import { CgProfile } from 'react-icons/cg';
 import { FiMenu } from 'react-icons/fi';
 import { AiOutlineClose } from 'react-icons/ai';
+import { Helmet } from 'react-helmet-async';
 
 const Dashboard = () => {
   const [userInfo] = useGetData();
@@ -22,6 +23,9 @@ const Dashboard = () => {
 
   return (
     <div className="flex flex-col lg:flex-row">
+      <Helmet>
+        <title>Parcel Patah | Dashboard</title>
+      </Helmet>
       <header className="flex items-center justify-between lg:hidden p-4 bg-gray-50 dark:bg-gray-900">
         <h1 className="text-xl font-bold">Welcome {userInfo?.name}!</h1>
         <button

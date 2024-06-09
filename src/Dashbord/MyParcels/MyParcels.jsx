@@ -5,6 +5,7 @@ import useAuth from '../../Hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
 import useGetData from '../../Hooks/useGetData';
+import { Helmet } from 'react-helmet-async';
 
 const MyParcels = () => {
   const axiosInstance = useAxiosInstance();
@@ -112,6 +113,9 @@ const MyParcels = () => {
 
   return (
     <div className="container overflow-x-auto mx-auto p-4">
+      <Helmet>
+        <title>Parcel Patah | My Parcel</title>
+      </Helmet>
       <h2 className="text-2xl font-bold mb-4">My Parcels</h2>
       <div className="mb-4">
         <label className="mr-2">Filter by Status:</label>

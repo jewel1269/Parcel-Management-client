@@ -2,6 +2,7 @@ import React from 'react';
 import useGetData from '../../Hooks/useGetData';
 import useAuth from '../../Hooks/useAuth';
 import { NavLink } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 
 const MyProfile = () => {
   const [userInfo] = useGetData();
@@ -9,6 +10,9 @@ const MyProfile = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Parcel Patah | Profile</title>
+      </Helmet>
       {user ? (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
           <div className="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center w-full max-w-4xl">
