@@ -21,6 +21,7 @@ import { Helmet } from 'react-helmet-async';
 
 const imageHostingKey = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const imageHostingApi = `https://api.imgbb.com/1/upload?key=${imageHostingKey}`;
+
 const SignIn = () => {
   const { createUser } = useAuth();
   const navigate = useNavigate();
@@ -67,7 +68,7 @@ const SignIn = () => {
       const res = await axiosInstance.post('/users', userInfo);
       console.log(res.data);
       if (res.data.insertedId) {
-        toast.success('Registation Complete');
+        toast.success('Registration Complete');
         navigate('/');
       }
     } catch (error) {
@@ -86,16 +87,16 @@ const SignIn = () => {
         <title>Parcel Patah | Sign Up</title>
       </Helmet>
       <div className="max-w-6xl w-full bg-white shadow-lg rounded-lg p-8 space-y-8 md:flex md:space-y-0 md:space-x-8">
-        <div className=" md:block w-1/2">
+        <div className="md:block w-1/2">
           <img
-            src={logo} // Replace with your image path
+            src={logo}
             alt="Login Illustration"
             className="w-full h-full object-cover rounded-lg"
           />
         </div>
         <div className="w-full md:w-1/2">
           <h2 className="text-center text-3xl font-extrabold text-gray-900">
-            SignIn to your account
+            Sign In to your account
           </h2>
           <form onSubmit={handleSubmit} className="mt-8 space-y-6">
             <div className="rounded-md shadow-sm -space-y-px">
@@ -177,7 +178,6 @@ const SignIn = () => {
                   required
                 />
               </div>
-
               <div>
                 <label htmlFor="birthday" className="sr-only">
                   Birthday
@@ -192,7 +192,7 @@ const SignIn = () => {
                 />
               </div>
               <div>
-                <label htmlFor="gender" className="sr-only">
+                <label htmlFor="role" className="sr-only">
                   Role
                 </label>
                 <select
@@ -203,7 +203,7 @@ const SignIn = () => {
                 >
                   <option value="role">Role</option>
                   <option value="user">User</option>
-                  <option value="deliveryMan">DeliveryMan</option>
+                  <option value="deliveryMan">Delivery Man</option>
                 </select>
               </div>
               <div>
@@ -234,7 +234,6 @@ const SignIn = () => {
                   placeholder="Site"
                 />
               </div>
-
               <div>
                 <label htmlFor="image" className="sr-only">
                   Profile Image
@@ -248,7 +247,6 @@ const SignIn = () => {
                 />
               </div>
             </div>
-
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <input
@@ -264,7 +262,6 @@ const SignIn = () => {
                   Remember me
                 </label>
               </div>
-
               <div className="text-sm">
                 <a
                   href="/forgot-password"
@@ -274,16 +271,14 @@ const SignIn = () => {
                 </a>
               </div>
             </div>
-
             <div>
               <button
                 type="submit"
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md  bg-orange-400  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md bg-orange-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 Sign in
               </button>
             </div>
-
             <div className="mt-6 flex justify-center space-x-4">
               <button
                 type="button"
@@ -300,9 +295,8 @@ const SignIn = () => {
                 <span className="ml-2">Sign in with GitHub</span>
               </button>
             </div>
-
             <div className="mt-6 text-center">
-              <span className="text-sm"> have an account? </span>
+              <span className="text-sm">Have an account? </span>
               <a
                 href="/Login"
                 className="text-sm text-indigo-600 hover:text-indigo-500"
