@@ -70,29 +70,53 @@ export const router = createBrowserRouter([
       //Admin
       {
         path: 'Statistics',
-        element: <Statistics />,
+        element: (
+          <PrivateRoute>
+            <Statistics />
+          </PrivateRoute>
+        ),
       },
       {
         path: 'AllParcel',
-        element: <AllParcel />,
+        element: (
+          <PrivateRoute>
+            <AllParcel />
+          </PrivateRoute>
+        ),
       },
       {
         path: 'DeliveryMenTable',
-        element: <DeliveryMenTable />,
+        element: (
+          <PrivateRoute>
+            <DeliveryMenTable />
+          </PrivateRoute>
+        ),
       },
       {
         path: 'UsersTable',
-        element: <UsersTable />,
+        element: (
+          <PrivateRoute>
+            <UsersTable />,
+          </PrivateRoute>
+        ),
       },
 
       //delivaryMan
       {
         path: 'MyDeliveryList',
-        element: <MyDeliveryList />,
+        element: (
+          <PrivateRoute>
+            <MyDeliveryList />
+          </PrivateRoute>
+        ),
       },
       {
         path: 'MyReviews',
-        element: <MyReviews />,
+        element: (
+          <PrivateRoute>
+            <MyReviews />
+          </PrivateRoute>
+        ),
       },
       {
         path: 'UpdateBooking/:id',

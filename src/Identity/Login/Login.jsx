@@ -15,7 +15,7 @@ import {
 } from 'react-icons/fa';
 import logo from '../../assets/5243321-removebg-preview.png';
 import useAuth from '../../Hooks/useAuth';
-import { GoogleAuthProvider } from 'firebase/auth';
+import { GithubAuthProvider, GoogleAuthProvider } from 'firebase/auth';
 import Swal from 'sweetalert2';
 import useAxiosInstance from '../../Hooks/useAxiosInstance';
 import { toast } from 'react-toastify';
@@ -70,8 +70,9 @@ const Login = () => {
       });
     });
     toast.success('Successfully Login');
-    navigate(location.state) || navigate('/');
+    navigate('/');
   };
+
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };

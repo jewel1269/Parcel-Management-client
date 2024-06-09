@@ -14,6 +14,7 @@ const DeliveryMenTable = () => {
       return res.data;
     },
   });
+  console.log(deliveryMen);
 
   // Generate random numbers for parcels delivered and average review
   const getRandomParcelsDelivered = () => Math.floor(Math.random() * 60) + 1;

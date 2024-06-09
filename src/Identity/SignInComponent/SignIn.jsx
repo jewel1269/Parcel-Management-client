@@ -199,7 +199,7 @@ const SignIn = () => {
                 >
                   <option value="role">Role</option>
                   <option value="user">User</option>
-                  <option value="delivaryMan">DelivaryMan</option>
+                  <option value="deliveryMan">DeliveryMan</option>
                 </select>
               </div>
               <div>

@@ -16,7 +16,7 @@ const DeliveryMen = () => {
     Math.floor(Math.random() * (max - min + 1)) + min;
 
   deliveryMen.forEach(man => {
-    man.parcelsDelivered = generateRandomNumber(10, 100);
+    man.parcelsDelivered = generateRandomNumber(10, 40);
     man.averageRating = generateRandomNumber(1, 5).toFixed(1);
   });
 

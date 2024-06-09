@@ -29,7 +29,6 @@ const MyDeliveryList = () => {
     if (window.confirm('Are you sure you want to cancel this delivery?')) {
       const updatedParcels = [...parcels];
       updatedParcels[index].status = 'Cancelled';
-      d;
       await axiosInstance.patch(
         `/updateDeliveredStatus/${parcels[index]._id}`,
         {
@@ -70,6 +69,31 @@ const MyDeliveryList = () => {
       console.error('Error delivering parcel:', error);
       Swal.fire('Error', 'Failed to deliver parcel', 'error');
     }
+  };
+
+  const handleDelete = async id => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then(result => {
+      if (result.isConfirmed) {
+        axiosInstance.delete(`/itemDelete/${id}`).then(response => {
+          Swal.fire({
+            title: 'Deleted!',
+            text: 'Your file has been deleted.',
+            icon: 'success',
+          });
+        });
+        refetch().catch(error => {
+          console.log(error);
+        });
+      }
+    });
   };
 
   const openModal = (latitude, longitude) => {
@@ -117,7 +141,10 @@ const MyDeliveryList = () => {
                 </button>
 
                 {parcel.status === 'Delivered' ? (
-                  <button className="btn-xs text-white bg-orange-500 px-3 py-1 rounded ">
+                  <button
+                    onClick={() => handleDelete(parcel._id)}
+                    className="btn-xs text-white bg-orange-500 px-3 py-1 rounded "
+                  >
                     delete
                   </button>
                 ) : (

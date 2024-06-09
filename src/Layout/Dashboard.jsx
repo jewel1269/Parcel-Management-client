@@ -199,7 +199,7 @@ const Dashboard = () => {
           </div>
         )}
 
-        {role === 'delivaryMan' && (
+        {role === 'deliveryMan' && (
           <div className="flex flex-col justify-between flex-1 mt-6">
             <nav>
               <NavLink

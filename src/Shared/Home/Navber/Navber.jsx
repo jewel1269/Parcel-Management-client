@@ -166,7 +166,7 @@ const Navbar = () => {
                             Dashboard
                           </NavLink>
                         )}
-                        {role === 'delivaryMan' && (
+                        {role === 'deliveryMan' && (
                           <NavLink
                             to={'Dashboard/MyDeliveryList'}
                             className="flex text-start items-center hover:bg-white hover:text-black px-2 py-1"

@@ -77,6 +77,7 @@ const AllParcel = () => {
       });
       handleAssignStatus(selectedParcel._id);
     }
+    refetch();
     closeModal();
   };
 
