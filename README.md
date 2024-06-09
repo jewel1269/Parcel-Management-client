@@ -53,4 +53,4 @@ Currently, two official plugins are available:
 
 ## Contact
 
-For any inquiries or support, please contact us at support@parcel-system.com.
+For any inquiries or support, please contact us at jewelmia2330@gmail.com.
