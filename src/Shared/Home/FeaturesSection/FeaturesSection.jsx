@@ -44,7 +44,7 @@ const FeaturesSection = () => {
 
   return (
     <section className="features containe lg:ml-10 lg:mr-10 mx-auto py-12 px-4 md:px-8">
-      <h2 className="text-3xl font-bold italic text-yellow-500 text-center mb-8">
+      <h2 className="text-3xl font-bold text-center mb-8">
         Our Powerful Features
       </h2>
       <div className="grid gap-8 md:grid-cols-3">

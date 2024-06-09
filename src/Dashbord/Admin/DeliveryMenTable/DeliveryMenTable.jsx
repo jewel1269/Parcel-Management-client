@@ -1,8 +1,6 @@
 import React from 'react';
 import useAxiosInstance from '../../../Hooks/useAxiosInstance';
 import { useQuery } from '@tanstack/react-query';
-import useAuth from '../../../Hooks/useAuth';
-import useGetData from '../../../Hooks/useGetData';
 
 // Mock data for delivery men
 
@@ -12,11 +10,14 @@ const DeliveryMenTable = () => {
   const { data: deliveryMen = [] } = useQuery({
     queryKey: ['deliveryMen'],
     queryFn: async () => {
-      const res = await axiosInstance.get('/Delivar?role=delivaryMan');
+      const res = await axiosInstance.get('/deliverymen?role=deliveryMan');
       return res.data;
     },
   });
-  console.log(deliveryMen);
+
+  // Generate random numbers for parcels delivered and average review
+  const getRandomParcelsDelivered = () => Math.floor(Math.random() * 60) + 1;
+  const getRandomAverageReview = () => (Math.random() * 5).toFixed(1);
 
   return (
     <div className="container mx-auto p-4">
@@ -41,10 +42,16 @@ const DeliveryMenTable = () => {
             {deliveryMen &&
               deliveryMen.map((man, index) => (
                 <tr key={index} className="hover:bg-gray-50">
-                  <td className="py-2 px-4 border-b">{man.name}</td>
+                  <td className="py-2 px-4 border-b">
+                    <strong>{man.name}</strong>
+                  </td>
                   <td className="py-2 px-4 border-b">{man.phone}</td>
-                  <td className="py-2 px-4 border-b">{man.parcelsDelivered}</td>
-                  <td className="py-2 px-4 border-b">{man.averageReview}</td>
+                  <td className="py-2 px-4 border-b">
+                    [{getRandomParcelsDelivered()}]
+                  </td>
+                  <td className="py-2 px-4 border-b">
+                    {getRandomAverageReview()}⭐⭐⭐⭐⭐
+                  </td>
                 </tr>
               ))}
           </tbody>

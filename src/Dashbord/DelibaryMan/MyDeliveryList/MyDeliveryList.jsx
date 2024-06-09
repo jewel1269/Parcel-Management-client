@@ -29,6 +29,7 @@ const MyDeliveryList = () => {
     if (window.confirm('Are you sure you want to cancel this delivery?')) {
       const updatedParcels = [...parcels];
       updatedParcels[index].status = 'Cancelled';
+      d;
       await axiosInstance.patch(
         `/updateDeliveredStatus/${parcels[index]._id}`,
         {

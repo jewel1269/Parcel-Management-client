@@ -4,6 +4,10 @@ import useAuth from '../../../Hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
 
+// Function to generate a random number within a specified range
+const getRandomNumber = (min, max) =>
+  Math.floor(Math.random() * (max - min + 1)) + min;
+
 const UsersTable = () => {
   const { user } = useAuth();
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,42 +21,46 @@ const UsersTable = () => {
     },
   });
 
+  // Add random data to users
+  const processedUsers = users.map(user => ({
+    ...user,
+    parcelsBooked: user.parcelsBooked ?? getRandomNumber(1, 60),
+    totalSpent: user.totalSpent ?? getRandomNumber(50, 1000),
+  }));
+
   // Logic for displaying users
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
-  const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+  const currentUsers = processedUsers.slice(indexOfFirstUser, indexOfLastUser);
 
   // Change page
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
   const handleMakeDeliveryMan = user => {
-    console.log(user._id);
     Swal.fire({
       title: 'Are you sure?',
-      text: 'You make delivary man!',
+      text: 'You will make this user a delivery man!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, cancel it!',
+      confirmButtonText: 'Yes, make delivery man!',
     }).then(result => {
       if (result.isConfirmed) {
         axiosInstance
-          .patch(`/updateRole/${user._id}`, { role: 'delivaryMan' })
+          .patch(`/updateRole/${user._id}`, { role: 'deliveryMan' })
           .then(response => {
-            console.log(response.data);
             Swal.fire({
-              title: 'Successfull!',
-              text: `Now ${user?.name} is delivary man`,
+              title: 'Successful!',
+              text: `${user.name} is now a delivery man.`,
               icon: 'success',
             });
+            refetch();
           })
           .catch(error => {
-            // Handle error scenarios
-            console.error('Error cancelling parcel:', error);
             Swal.fire({
               title: 'Error!',
-              text: 'Failed to cancel the parcel. Please try again later.',
+              text: 'Failed to update the role. Please try again later.',
               icon: 'error',
             });
           });
@@ -61,33 +69,30 @@ const UsersTable = () => {
   };
 
   const handleMakeAdmin = user => {
-    console.log(user._id);
     Swal.fire({
       title: 'Are you sure?',
-      text: 'You make delivary man!',
+      text: 'You will make this user an admin!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, cancel it!',
+      confirmButtonText: 'Yes, make admin!',
     }).then(result => {
       if (result.isConfirmed) {
         axiosInstance
           .patch(`/updateRole/${user._id}`, { role: 'admin' })
           .then(response => {
-            console.log(response.data);
             Swal.fire({
-              title: 'Successfull!',
-              text: `Now ${user?.name} is delivary man`,
+              title: 'Successful!',
+              text: `${user.name} is now an admin.`,
               icon: 'success',
             });
+            refetch();
           })
           .catch(error => {
-            // Handle error scenarios
-            console.error('Error cancelling parcel:', error);
             Swal.fire({
               title: 'Error!',
-              text: 'Failed to cancel the parcel. Please try again later.',
+              text: 'Failed to update the role. Please try again later.',
               icon: 'error',
             });
           });
@@ -97,8 +102,8 @@ const UsersTable = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4 ">
-        All Users <span>({currentUsers.length})</span>
+      <h1 className="text-2xl font-bold mb-4">
+        All Users <span>({users.length})</span>
       </h1>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200">
@@ -121,9 +126,9 @@ const UsersTable = () => {
                 <td className="py-2 px-4 border-b">{user.name}</td>
                 <td className="py-2 px-4 border-b">{user.phone}</td>
                 <td className="py-2 px-4 border-b">{user.parcelsBooked}</td>
-                <td className="py-2 px-4 border-b">{user.totalSpent} USD</td>
+                <td className="py-2 px-4 border-b">{user.totalSpent} Taka</td>
                 <td className="py-2 px-4 border-b">
-                  {user?.role !== 'delivaryMan' && (
+                  {user?.role !== 'deliveryMan' && (
                     <button
                       className="bg-green-500 lg:btn-sm md:btn-sm btn-xs text-white px-4 rounded mr-2"
                       onClick={() => handleMakeDeliveryMan(user)}
@@ -134,7 +139,7 @@ const UsersTable = () => {
 
                   {user?.role !== 'admin' && (
                     <button
-                      className="bg-blue-500 lg:btn-sm md:btn-sm btn-xs text-white px-4  rounded"
+                      className="bg-blue-500 lg:btn-sm md:btn-sm btn-xs text-white px-4 rounded"
                       onClick={() => handleMakeAdmin(user)}
                     >
                       Make Admin

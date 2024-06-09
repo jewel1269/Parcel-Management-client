@@ -7,7 +7,8 @@ import {
   faTwitter,
 } from '@fortawesome/free-brands-svg-icons';
 import '../Footer/Style.css';
-
+import logo from '../../../public/percelpath.png';
+import { Animated } from 'react-animated-css';
 const Footer = () => {
   return (
     <div className="relative overflow-hidden bg-gray-200 py-10">
@@ -22,11 +23,14 @@ const Footer = () => {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h2 className="font-bold text-lg mb-4">Shop Matcha</h2>
+            <div className="flex">
+              <img className="w-auto h-10 " src={logo} alt="Logo" />
+              <h1 className="text-3xl text-black font-semibold">ParcelPath</h1>
+            </div>
             <ul>
               <li>
                 <a href="#" className="text-gray-600 hover:text-gray-900">
-                  Just the Matcha
+                  Just the ParcelPath
                 </a>
               </li>
               <li>
@@ -47,27 +51,27 @@ const Footer = () => {
             </ul>
           </div>
           <div>
-            <h2 className="font-bold text-lg mb-4">Learn</h2>
+            <h2 className="font-bold text-lg mb-4">Passionate</h2>
             <ul>
               <li>
                 <a href="#" className="text-gray-600 hover:text-gray-900">
-                  Matcha Recipes
+                  Secure Delivary
                 </a>
               </li>
               <li>
                 <a href="#" className="text-gray-600 hover:text-gray-900">
-                  Caffeine Content
+                  100% Authentic
                 </a>
               </li>
               <li>
                 <a href="#" className="text-gray-600 hover:text-gray-900">
-                  Health Benefits
+                  24/7 Support
                 </a>
               </li>
             </ul>
           </div>
           <div>
-            <h2 className="font-bold text-lg mb-4">More from Tenzo</h2>
+            <h2 className="font-bold text-lg mb-4">More from ParcelPath</h2>
             <ul>
               <li>
                 <a href="#" className="text-gray-600 hover:text-gray-900">
@@ -134,7 +138,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="border-t border-gray-300 mt-8 pt-6 flex flex-col md:flex-row justify-between text-gray-600">
-          <p>© 2021 tenzotea.co</p>
+          <p>© 2021 ParcelPath.com</p>
           <div className="flex space-x-4">
             <a href="#" className="hover:text-gray-900">
               Terms of Service

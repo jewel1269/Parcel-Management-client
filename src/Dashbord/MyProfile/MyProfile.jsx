@@ -47,13 +47,15 @@ const MyProfile = () => {
                   </button>
                 </form>
                 <h3 className="text-xl font-bold text-gray-800 mb-2">
-                  About Me
+                  About Company:
                 </h3>
                 <p className="text-gray-600">
-                  Lorem ipsum dolor sit amet, consectetur sadipscing elit, sed
-                  diam nonumy eirmod tempor invidunt ut labore et dolore magna
-                  aliquyam erat, sed diam voluptua. At vero eos et accusam et
-                  justo duo dolores et ea rebum.
+                  The Parcel Management System optimizes parcel delivery
+                  processes, offering real-time tracking, automated
+                  notifications, and comprehensive reporting. Our company
+                  ensures reliable, efficient, and customer-centric parcel
+                  delivery services, utilizing cutting-edge technology for
+                  precision and satisfaction.
                 </p>
               </div>
               <div className="w-full md:w-2/3 mt-4 md:mt-0 md:pl-8">

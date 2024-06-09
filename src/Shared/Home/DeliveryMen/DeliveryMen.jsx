@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { FaStar } from 'react-icons/fa';
+import React from 'react';
 import useAxiosInstance from '../../../Hooks/useAxiosInstance';
 import { useQuery } from '@tanstack/react-query';
 
@@ -13,9 +12,19 @@ const DeliveryMen = () => {
     },
   });
 
+  const generateRandomNumber = (min, max) =>
+    Math.floor(Math.random() * (max - min + 1)) + min;
+
+  deliveryMen.forEach(man => {
+    man.parcelsDelivered = generateRandomNumber(10, 100);
+    man.averageRating = generateRandomNumber(1, 5).toFixed(1);
+  });
+
+  deliveryMen.sort((a, b) => b.parcelsDelivered - a.parcelsDelivered);
+
   return (
-    <div className="container mx-auto px-4 py-12">
-      <h2 className="text-3xl font-bold italic text-yellow-500 text-center mb-8">
+    <div className="  container mx-auto px-4 py-12">
+      <h2 className="text-3xl font-bold   text-center mb-8">
         Top Delivery Men
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -31,7 +40,7 @@ const DeliveryMen = () => {
               }}
             ></div>
 
-            <div className="w-56 -mt-10 overflow-hidden bg-white rounded-lg shadow-lg md:w-64 dark:bg-gray-800">
+            <div className=" animate__animated animate__bounceInLeft  w-56 -mt-10 overflow-hidden bg-white rounded-lg shadow-lg md:w-64 dark:bg-gray-800">
               <h3 className="py-2 font-bold tracking-wide text-center text-gray-800 uppercase dark:text-white">
                 {man.name}
               </h3>

@@ -5,6 +5,8 @@ import logo from '../../../../public/percelpath.png';
 import { NavLink } from 'react-router-dom';
 import useAuth from '../../../Hooks/useAuth';
 import useGetData from '../../../Hooks/useGetData';
+import 'react-tooltip/dist/react-tooltip.css';
+import { Tooltip as ReactTooltip, Tooltip } from 'react-tooltip';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -82,7 +84,7 @@ const Navbar = () => {
         >
           <div className="flex flex-col md:flex-row md:mx-6">
             <a
-              className="my-2 text-green-500 transition-colors duration-300 transform dark:text-gray-200 hover:text-orange-400 dark:hover:text-blue-400 md:mx-4 md:my-0"
+              className="my-2 text-orange-500 font-semibold transition-colors duration-300 transform dark:text-gray-200 hover:text-white dark:hover:text-blue-400 md:mx-4 md:my-0"
               href="#"
             >
               Home
@@ -92,7 +94,7 @@ const Navbar = () => {
             ) : (
               <NavLink to={'Dashboard/MyProfile'}>
                 <a
-                  className="my-2 text-green-500 transition-colors duration-300 transform hover:text-orange-400  dark:hover:text-blue-400 md:mx-4 md:my-0"
+                  className="my-2 text-orange-500 font-semibold transition-colors duration-300 transform hover:text-white dark:hover:text-blue-400 md:mx-4 md:my-0"
                   href="#"
                 >
                   Dashboard
@@ -106,7 +108,7 @@ const Navbar = () => {
               className="relative text-green-500 transition-colors duration-300 transform dark:text-gray-200 hover:text-gray-600 dark:hover:text-gray-300"
               href="#"
             >
-              <MdNotificationAdd className="h-6 hover:text-orange-400 w-6" />
+              <MdNotificationAdd className="h-6 text-orange-500  hover:text-white w-6" />
             </a>
             {user ? (
               <div className="relative">
@@ -128,10 +130,18 @@ const Navbar = () => {
                           }
                         />
                       ) : (
-                        <img
-                          alt="User Avatar"
-                          src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-                        />
+                        <div>
+                          <div
+                            data-tooltip-id="my-tooltip"
+                            data-tooltip-content="Login"
+                          >
+                            <img
+                              alt="User Avatar"
+                              src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+                            />
+                          </div>
+                          <Tooltip id="my-tooltip" />
+                        </div>
                       )}
                     </div>
                   </div>
