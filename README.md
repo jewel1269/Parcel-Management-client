@@ -1,55 +1,53 @@
-# React + Vite
+# Parcel Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and
-some ESLint rules.
+![Project Live Link](https://parcel-system-management.web.app/)
 
-Currently, two official plugins are available:
+A web application for efficient parcel tracking and management.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md)
-  uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc)
-  uses [SWC](https://swc.rs/) for Fast Refresh
+## Table of Contents
 
-# Parcel System Management
+- [Parcel Management System](#parcel-management-system)
+  - [Table of Contents](#table-of-contents)
+  - [Introduction](#introduction)
+  - [Features](#features)
+  - [Technologies Used](#technologies-used)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Contact](#contact)
 
-**Admin Username**: prohrammingherob9@gmail.com  
-**Admin Password**: batch9  
-**Live Site URL**:
-[https://parcel-system-management.web.app/](https://parcel-system-management.web.app/)
+## Introduction
+
+The Parcel Management System is a full-stack web application built to streamline parcel tracking and delivery logistics. It provides users with real-time updates on parcel statuses and allows administrators to manage parcels and user accounts effectively.
 
 ## Features
 
-1. **User-Friendly Dashboard**: Intuitive interface for managing parcels and
-   tracking shipments.
-2. **Real-Time Tracking**: Monitor parcel status and location updates in
-   real-time.
-3. **Secure Login System**: Admin and user login with robust security measures.
-4. **Automated Notifications**: Email and SMS alerts for parcel status changes.
-5. **Advanced Search and Filter**: Easily find parcels with advanced search and
-   filtering options.
-6. **Comprehensive Reporting**: Generate detailed reports on parcel history,
-   status, and delivery performance.
-7. **Multiple User Roles**: Different access levels for admins, couriers, and
-   customers.
-8. **Integration with GPS**: Accurate tracking with GPS integration for
-   real-time location updates.
-9. **Responsive Design**: Fully responsive layout for optimal viewing on all
-   devices.
-10. **API Access**: Public API for third-party integrations and custom
-    developments.
+- **User Authentication:** Secure login and registration system.
+- **Parcel Tracking:** Real-time tracking of parcel status.
+- **Admin Dashboard:** Dashboard for administrators to manage users and parcels.
+- **Notifications:** Automated notifications for parcel updates.
 
-## How to Use
+## Technologies Used
 
-1. Visit the [live site](https://parcel-system-management.web.app/).
-2. Login with the admin credentials:
-   - **Username**: prohrammingherob9@gmail.com
-   - **Password**: batch
-3. Navigate through the dashboard to manage parcels, track shipments, and access
-   other features.
-4. Use the search and filter options to find specific parcels.
-5. Check the real-time status and location updates of your shipments.
-6. Configure notifications to stay updated on parcel status changes.
-7. Generate reports to analyze and improve delivery performance.
+- **Frontend:** React.js, Bootstrap
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB
+- **Hosting:** Firebase
+
+## Installation
+
+To run this project locally, follow these steps:
+
+1. Clone the repository: `git clone https://github.com/your-username/parcel-management-system.git`
+2. Navigate to the project directory: `cd parcel-management-system`
+3. Install dependencies: `npm install`
+
+## Usage
+
+After installation, start the development server:
+
+```bash
+npm start
+
 
 ## Contact
 
